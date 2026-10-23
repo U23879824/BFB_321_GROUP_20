@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>StockWise | Inventory Dashboard</title>
+
+    <!-- Icons -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <!-- Our CSS file -->
+    <link rel="stylesheet" href="../static/css/style.css">
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-icon">
+                <i class="fa-solid fa-boxes-stacked"></i>
+            </div>
+            <div>
+                <h2>StockWise</h2>
+                <span>Retail Inventory System</span>
+            </div>
+        </div>
+
+        <div class="sidebar-label">MAIN MENU</div>
+
+        <nav class="sidebar-nav">
+            <a href="#overview" class="nav-link active">
+                <i class="fa-solid fa-house"></i>
+                <span>Overview</span>
+            </a>
+
+            <a href="#inventory" class="nav-link">
+                <i class="fa-solid fa-box"></i>
+                <span>Inventory</span>
+            </a>
+
+            <a href="#locations" class="nav-link">
+                <i class="fa-solid fa-location-dot"></i>
+                <span>Store Locations</span>
+            </a>
+
+            <a href="#orders" class="nav-link">
+                <i class="fa-solid fa-truck-fast"></i>
+                <span>Fulfilment Orders</span>
+            </a>
+
+            <a href="#discrepancies" class="nav-link">
+                <i class="fa-solid fa-scale-balanced"></i>
+                <span>Stock Discrepancies</span>
+            </a>
+
+            <a href="#activity" class="nav-link">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                <span>Recent Activity</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-label">SYSTEM</div>
+
+        <nav class="sidebar-nav">
+            <a href="#reports" class="nav-link">
+                <i class="fa-solid fa-chart-column"></i>
+                <span>Reports</span>
+            </a>
+
+            <a href="#settings" class="nav-link">
+                <i class="fa-solid fa-gear"></i>
+                <span>Settings</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <div class="store-avatar">
+                <i class="fa-solid fa-store"></i>
+            </div>
+            <div>
+                <span class="muted-text">Selected store</span>
+                <strong>Hatfield Store</strong>
+                <span class="online-status">
+                    <span class="status-dot"></span> Demo mode
+                </span>
+            </div>
+        </div>
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <!-- TOP BAR -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="mobile-menu" aria-label="Menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <div>
+                    <p class="breadcrumb">Dashboard / Overview</p>
+                    <h1>Inventory Overview</h1>
+                </div>
+            </div>
+
+            <div class="topbar-right">
+                <span class="demo-badge">
+                    <i class="fa-solid fa-circle-info"></i>
+                    Sample data
+                </span>
+
+                <div class="user-profile">
+                    <div class="user-avatar">JD</div>
+                    <div class="user-info">
+                        <strong>Store Manager</strong>
+                        <span>Demo account</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+
+        <!-- PAGE CONTENT -->
+        <div class="dashboard-content" id="overview">
+
+            <!-- WELCOME BANNER -->
+            <section class="welcome-banner">
+                <div class="welcome-text">
+                    <span class="eyebrow">STOCKWISE INVENTORY MANAGEMENT</span>
+                    <h2>Welcome to your dashboard</h2>
+                    <p>
+                        Monitor stock levels, compare store availability
+                        and support faster online order fulfilment.
+                    </p>
+                    <a href="#inventory" class="primary-button">
+                        View inventory
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="welcome-illustration">
+                    <div class="illustration-circle">
+                        <i class="fa-solid fa-warehouse"></i>
+                    </div>
+                    <div class="floating-icon floating-one">
+                        <i class="fa-solid fa-box"></i>
+                    </div>
+                    <div class="floating-icon floating-two">
+                        <i class="fa-solid fa-truck-fast"></i>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- SUMMARY CARDS -->
+            <section class="stats-grid">
+
+                <article class="stat-card">
+                    <div class="stat-top">
+                        <div class="stat-icon blue-icon">
+                            <i class="fa-solid fa-boxes-stacked"></i>
+                        </div>
+                        <span class="stat-tag neutral-tag">Tracked</span>
+                    </div>
+                    <p class="stat-label">Total stock units</p>
+                    <h3>1,248</h3>
+                    <p class="stat-note">Across all demo stores</p>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-top">
+                        <div class="stat-icon orange-icon">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
+                        <span class="stat-tag warning-tag">Attention</span>
+                    </div>
+                    <p class="stat-label">Low-stock products</p>
+                    <h3>42</h3>
+                    <p class="stat-note">Below their stock threshold</p>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-top">
+                        <div class="stat-icon green-icon">
+                            <i class="fa-solid fa-store"></i>
+                        </div>
+                        <span class="stat-tag success-tag">Online</span>
+                    </div>
+                    <p class="stat-label">Stores monitored</p>
+                    <h3>3</h3>
+                    <p class="stat-note">Hatfield, Brooklyn and Centurion</p>
+                </article>
+
+                <article class="stat-card">
+                    <div class="stat-top">
+                        <div class="stat-icon purple-icon">
+                            <i class="fa-solid fa-truck-fast"></i>
+                        </div>
+                        <span class="stat-tag info-tag">In progress</span>
+                    </div>
+                    <p class="stat-label">Pending orders</p>
+                    <h3>6</h3>
+                    <p class="stat-note">Awaiting fulfilment</p>
+                </article>
+
+            </section>
+
+
+            <!-- STORE LOCATIONS -->
+            <section class="section" id="locations">
+
+                <div class="section-heading">
+                    <div>
+                        <h2>Store availability</h2>
+                        <p>Compare stock availability across locations.</p>
+                    </div>
+                    <a href="#locations" class="text-link">
+                        View all stores <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="store-grid">
+
+                    <article class="store-card">
+                        <div class="store-card-top">
+                            <div class="store-icon">
+                                <i class="fa-solid fa-shop"></i>
+                            </div>
+                            <span class="store-status">
+                                <span class="status-dot"></span> Monitored
+                            </span>
+                        </div>
+                        <h3>Hatfield Store</h3>
+                        <p class="store-address">Pretoria, Gauteng</p>
+                        <div class="availability-row">
+                            <span>Sample availability</span>
+                            <strong>92%</strong>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill progress-green" style="width: 92%;"></div>
+                        </div>
+                    </article>
+
+                    <article class="store-card">
+                        <div class="store-card-top">
+                            <div class="store-icon purple-store">
+                                <i class="fa-solid fa-shop"></i>
+                            </div>
+                            <span class="store-status">
+                                <span class="status-dot"></span> Monitored
+                            </span>
+                        </div>
+                        <h3>Brooklyn Store</h3>
+                        <p class="store-address">Pretoria, Gauteng</p>
+                        <div class="availability-row">
+                            <span>Sample availability</span>
+                            <strong>87%</strong>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill progress-blue" style="width: 87%;"></div>
+                        </div>
+                    </article>
+
+                    <article class="store-card">
+                        <div class="store-card-top">
+                            <div class="store-icon orange-store">
+                                <i class="fa-solid fa-shop"></i>
+                            </div>
+                            <span class="store-status">
+                                <span class="status-dot"></span> Monitored
+                            </span>
+                        </div>
+                        <h3>Centurion Store</h3>
+                        <p class="store-address">Centurion, Gauteng</p>
+                        <div class="availability-row">
+                            <span>Sample availability</span>
+                            <strong>78%</strong>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill progress-orange" style="width: 78%;"></div>
+                        </div>
+                    </article>
+
+                </div>
+            </section>
+
+
+            <!-- INVENTORY AND LOW STOCK -->
+            <section class="content-grid">
+
+                <!-- INVENTORY OVERVIEW -->
+                <article class="panel" id="inventory">
+                    <div class="panel-heading">
+                        <div>
+                            <h2>Inventory status</h2>
+                            <p>Example breakdown of product stock.</p>
+                        </div>
+                        <span class="panel-icon">
+                            <i class="fa-solid fa-chart-pie"></i>
+                        </span>
+                    </div>
+
+                    <div class="inventory-summary">
+                        <div class="donut-chart">
+                            <div class="donut-inner">
+                                <strong>1,248</strong>
+                                <span>Stock units</span>
+                            </div>
+                        </div>
+
+                        <div class="chart-legend">
+                            <div class="legend-item">
+                                <span class="legend-dot legend-green"></span>
+                                <div>
+                                    <strong>In stock</strong>
+                                    <span>1,076 units</span>
+                                </div>
+                            </div>
+
+                            <div class="legend-item">
+                                <span class="legend-dot legend-orange"></span>
+                                <div>
+                                    <strong>Low stock</strong>
+                                    <span>42 units</span>
+                                </div>
+                            </div>
+
+                            <div class="legend-item">
+                                <span class="legend-dot legend-red"></span>
+                                <div>
+                                    <strong>Out of stock</strong>
+                                    <span>130 units</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+
+                <!-- LOW STOCK TABLE -->
+                <article class="panel" id="low-stock">
+                    <div class="panel-heading">
+                        <div>
+                            <h2>Products needing attention</h2>
+                            <p>Products below their sample thresholds.</p>
+                        </div>
+                        <span class="panel-icon warning-panel-icon">
+                            <i class="fa-solid fa-bell"></i>
+                        </span>
+                    </div>
+
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Current stock</th>
+                                    <th>Threshold</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="product-cell">
+                                            <span class="product-emoji">🥛</span>
+                                            Milk 1L
+                                        </div>
+                                    </td>
+                                    <td class="danger-text">3</td>
+                                    <td>10</td>
+                                    <td><span class="status-pill low">Low</span></td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <div class="product-cell">
+                                            <span class="product-emoji">🍞</span>
+                                            White bread
+                                        </div>
+                                    </td>
+                                    <td class="danger-text">5</td>
+                                    <td>15</td>
+                                    <td><span class="status-pill low">Low</span></td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <div class="product-cell">
+                                            <span class="product-emoji">🥚</span>
+                                            Eggs (12 pack)
+                                        </div>
+                                    </td>
+                                    <td class="danger-text">7</td>
+                                    <td>20</td>
+                                    <td><span class="status-pill low">Low</span></td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <div class="product-cell">
+                                            <span class="product-emoji">🍗</span>
+                                            Chicken fillets
+                                        </div>
+                                    </td>
+                                    <td class="danger-text">4</td>
+                                    <td>12</td>
+                                    <td><span class="status-pill low">Low</span></td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <div class="product-cell">
+                                            <span class="product-emoji">🧻</span>
+                                            Toilet paper
+                                        </div>
+                                    </td>
+                                    <td class="danger-text">6</td>
+                                    <td>15</td>
+                                    <td><span class="status-pill low">Low</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </article>
+
+            </section>
+
+
+            <!-- STOCK DISCREPANCIES AND ORDERS -->
+            <section class="content-grid wide-left">
+
+                <!-- DISCREPANCIES -->
+                <article class="panel" id="discrepancies">
+                    <div class="panel-heading">
+                        <div>
+                            <h2>Stock discrepancy checks</h2>
+                            <p>Compare recorded quantities with physical counts.</p>
+                        </div>
+                        <span class="panel-icon">
+                            <i class="fa-solid fa-scale-balanced"></i>
+                        </span>
+                    </div>
+
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Store</th>
+                                    <th>Recorded</th>
+                                    <th>Physical</th>
+                                    <th>Difference</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Coca-Cola 500ml</td>
+                                    <td>Hatfield</td>
+                                    <td>24</td>
+                                    <td>24</td>
+                                    <td>0</td>
+                                    <td><span class="status-pill good">Matched</span></td>
+                                </tr>
+
+                                <tr>
+                                    <td>White bread</td>
+                                    <td>Brooklyn</td>
+                                    <td>8</td>
+                                    <td>6</td>
+                                    <td class="danger-text">-2</td>
+                                    <td><span class="status-pill low">Discrepancy</span></td>
+                                </tr>
+
+                                <tr>
+                                    <td>Chicken fillets</td>
+                                    <td>Centurion</td>
+                                    <td>15</td>
+                                    <td>14</td>
+                                    <td class="danger-text">-1</td>
+                                    <td><span class="status-pill low">Discrepancy</span></td>
+                                </tr>
+
+                                <tr>
+                                    <td>Milk 1L</td>
+                                    <td>Hatfield</td>
+                                    <td>12</td>
+                                    <td>12</td>
+                                    <td>0</td>
+                                    <td><span class="status-pill good">Matched</span></td>
+                                </tr>
+
+                                <tr>
+                                    <td>Toilet paper</td>
+                                    <td>Brooklyn</td>
+                                    <td>20</td>
+                                    <td>20</td>
+                                    <td>0</td>
+                                    <td><span class="status-pill good">Matched</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="panel-footer">
+                        <span>Sample data only — no live stock counts.</span>
+                        <a href="#inventory" class="text-link">Review inventory</a>
+                    </div>
+                </article>
+
+
+                <!-- FULFILMENT ORDERS -->
+                <article class="panel" id="orders">
+                    <div class="panel-heading">
+                        <div>
+                            <h2>Recent fulfilment orders</h2>
+                            <p>Example online order statuses.</p>
+                        </div>
+                        <span class="panel-icon">
+                            <i class="fa-solid fa-truck-fast"></i>
+                        </span>
+                    </div>
+
+                    <div class="orders-list">
+
+                        <div class="order-row">
+                            <div class="order-icon order-blue">
+                                <i class="fa-solid fa-basket-shopping"></i>
+                            </div>
+                            <div class="order-info">
+                                <strong>FP-1042</strong>
+                                <span>Hatfield · 5 items</span>
+                            </div>
+                            <span class="status-pill processing">Processing</span>
+                        </div>
+
+                        <div class="order-row">
+                            <div class="order-icon order-orange">
+                                <i class="fa-solid fa-box"></i>
+                            </div>
+                            <div class="order-info">
+                                <strong>FP-1041</strong>
+                                <span>Brooklyn · 3 items</span>
+                            </div>
+                            <span class="status-pill picking">Picking</span>
+                        </div>
+
+                        <div class="order-row">
+                            <div class="order-icon order-green">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            <div class="order-info">
+                                <strong>FP-1040</strong>
+                                <span>Centurion · 7 items</span>
+                            </div>
+                            <span class="status-pill ready">Ready</span>
+                        </div>
+
+                        <div class="order-row">
+                            <div class="order-icon order-purple">
+                                <i class="fa-solid fa-truck"></i>
+                            </div>
+                            <div class="order-info">
+                                <strong>FP-1039</strong>
+                                <span>Hatfield · 2 items</span>
+                            </div>
+                            <span class="status-pill delivered">Delivered</span>
+                        </div>
+
+                    </div>
+
+                    <div class="panel-footer">
+                        <span>4 example orders shown</span>
+                        <a href="#orders" class="text-link">View orders</a>
+                    </div>
+                </article>
+
+            </section>
+
+
+            <!-- RECENT ACTIVITY AND QUICK ACTIONS -->
+            <section class="content-grid">
+
+                <article class="panel" id="activity">
+                    <div class="panel-heading">
+                        <div>
+                            <h2>Recent activity</h2>
+                            <p>Example inventory events.</p>
+                        </div>
+                        <span class="panel-icon">
+                            <i class="fa-solid fa-clock-rotate-left"></i>
+                        </span>
+                    </div>
+
+                    <div class="activity-list">
+
+                        <div class="activity-row">
+                            <span class="activity-icon activity-blue">
+                                <i class="fa-solid fa-box"></i>
+                            </span>
+                            <div class="activity-description">
+                                <strong>Stock adjustment</strong>
+                                <p>White bread · Brooklyn Store</p>
+                            </div>
+                            <span class="activity-time">2 hours ago</span>
+                        </div>
+
+                        <div class="activity-row">
+                            <span class="activity-icon activity-green">
+                                <i class="fa-solid fa-truck-ramp-box"></i>
+                            </span>
+                            <div class="activity-description">
+                                <strong>Delivery received</strong>
+                                <p>Milk 1L · Hatfield Store</p>
+                            </div>
+                            <span class="activity-time">4 hours ago</span>
+                        </div>
+
+                        <div class="activity-row">
+                            <span class="activity-icon activity-red">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                            </span>
+                            <div class="activity-description">
+                                <strong>Low-stock alert</strong>
+                                <p>Eggs (12 pack) · Centurion</p>
+                            </div>
+                            <span class="activity-time">6 hours ago</span>
+                        </div>
+
+                        <div class="activity-row">
+                            <span class="activity-icon activity-purple">
+                                <i class="fa-solid fa-check"></i>
+                            </span>
+                            <div class="activity-description">
+                                <strong>Order fulfilled</strong>
+                                <p>FP-1042 · 5 items</p>
+                            </div>
+                            <span class="activity-time">Yesterday</span>
+                        </div>
+
+                    </div>
+                </article>
+
+
+                <article class="panel" id="reports">
+                    <div class="panel-heading">
+                        <div>
+                            <h2>Quick actions</h2>
+                            <p>Shortcuts for common tasks.</p>
+                        </div>
+                        <span class="panel-icon">
+                            <i class="fa-solid fa-bolt"></i>
+                        </span>
+                    </div>
+
+                    <div class="quick-actions">
+                        <a href="#inventory" class="action-card action-blue">
+                            <span class="action-icon">
+                                <i class="fa-solid fa-box-open"></i>
+                            </span>
+                            <span>
+                                <strong>View stock</strong>
+                                <small>Review product quantities</small>
+                            </span>
+                        </a>
+
+                        <a href="#locations" class="action-card action-green">
+                            <span class="action-icon">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </span>
+                            <span>
+                                <strong>Check locations</strong>
+                                <small>Compare store availability</small>
+                            </span>
+                        </a>
+
+                        <a href="#orders" class="action-card action-purple">
+                            <span class="action-icon">
+                                <i class="fa-solid fa-truck-fast"></i>
+                            </span>
+                            <span>
+                                <strong>Review orders</strong>
+                                <small>Check fulfilment progress</small>
+                            </span>
+                        </a>
+
+                        <a href="#discrepancies" class="action-card action-orange">
+                            <span class="action-icon">
+                                <i class="fa-solid fa-scale-balanced"></i>
+                            </span>
+                            <span>
+                                <strong>Check differences</strong>
+                                <small>Identify stock mismatches</small>
+                            </span>
+                        </a>
+                    </div>
+                </article>
+
+            </section>
+
+
+            <!-- FOOTER -->
+            <footer class="footer" id="settings">
+                <p>
+                    <strong>StockWise</strong> · Group 20 project prototype
+                </p>
+                <p>Illustrative data · Not connected to Pick n Pay systems</p>
+            </footer>
+
+        </div>
+    </main>
+</div>
+
+</body>
+</html>
