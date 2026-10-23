@@ -1,176 +1,94 @@
 from math import sqrt, radians, sin, cos, asin
-
-# ==================================================
-# INVENTORY FUNCTIONS
-# ==================================================
+# Inventory functions to keep track of demand, stock levels, and discrepancies
 
 def calculate_atp(on_hand, reserved):
-    return on_hand - reserved
+    atp = on_hand - reserved
+    return atp
 
 
 def inventory_discrepancy(system_stock, physical_stock):
-    return system_stock - physical_stock
+    discrepancy = system_stock - physical_stock
+    return discrepancy
 
 
 def inventory_accuracy(correct_records, total_records):
-    return round((correct_records / total_records) * 100, 2)
+    accuracy = (correct_records/total_records) * 100
+    return round(accuracy, 2)
 
 
-# ==================================================
-# EOQ FUNCTIONS
-# ==================================================
+
+# EOQ calclulations to determine optimal order quantities and safety stock levels and if there is enough stock in specific store locations
 
 def calculate_eoq(demand, ordering_cost, holding_cost):
+    eoq = round(sqrt((2 * demand * ordering_cost) / holding_cost),2)
+    return eoq
 
-    return round(
-        sqrt(
-            (2 * demand * ordering_cost)
-            / holding_cost
-        ),
-        2
-    )
+def safety_stock(max_daily_demand,average_daily_demand,lead_time):
+    safety_stock = (max_daily_demand - average_daily_demand) * lead_time
+    return safety_stock
 
 
-def safety_stock(
-        max_daily_demand,
-        average_daily_demand,
-        lead_time):
-
-    return (
-        max_daily_demand
-        - average_daily_demand
-    ) * lead_time
+def reorder_point(average_daily_demand,lead_time,safety_stock):
+    Rop = (average_daily_demand * lead_time) + safety_stock
+    return Rop
 
 
-def reorder_point(
-        average_daily_demand,
-        lead_time,
-        safety_stock_units):
+# KPI calculations to measure performance and efficiency of the inventory management system
 
-    return (
-        average_daily_demand
-        * lead_time
-    ) + safety_stock_units
+def substitution_rate(substitutions,total_orders):
+    sub_rate = (substitutions / total_orders) * 100
+    return round(sub_rate,2)
 
 
-# ==================================================
-# KPI FUNCTIONS
-# ==================================================
-
-def substitution_rate(
-        substitutions,
-        total_orders):
-
-    return round(
-        (substitutions / total_orders) * 100,
-        2
-    )
+def cancellation_rate(cancellations,total_orders):
+    cancel_rate = (cancellations / total_orders) * 100
+    return round(cancel_rate,2)
 
 
-def cancellation_rate(
-        cancellations,
-        total_orders):
+def fulfil_success_rate(fulfilled,total_orders):
+    success_rate = (fulfilled / total_orders) * 100
+    return round(success_rate,2)
 
-    return round(
-        (cancellations / total_orders) * 100,
-        2
-    )
+# Distance calculation to measure the distance between store and customer 
 
+def calc_distance(lati1,longi1,lati2,longi2):
 
-def fulfilment_success_rate(
-        fulfilled,
-        total_orders):
+    earth_rad = 6371 #Average radius of Earth used to calculate distance between 2 geographical locations in km.
 
-    return round(
-        (fulfilled / total_orders) * 100,
-        2
-    )
+    lati1, longi1, lati2, longi2 = map(radians, [lati1, longi1, lati2, longi2]) #Convert latitude and longitude values from degrees to radians.
 
+    dlati = lati2 - lati1  #Calculate difference between 2 locations in terms of latitude.
+    dlongi = longi2 - longi1  #Calculate difference between 2 locations in terms of longitude.
 
-# ==================================================
-# DISTANCE CALCULATION
-# ==================================================
+    a = (sin(dlati / 2) ** 2 + cos(lati1) * cos(lati2) * sin(dlongi / 2) ** 2) #Determine the angular distance between customer and store locations
 
-def calc_distance(
-        lat1,
-        lon1,
-        lat2,
-        lon2):
+    c = 2 * asin(sqrt(a)) #Calculate the central angle between 2 points
+    a_conv = earth_rad* c
+    return round(a_conv,2)
 
-    earth_radius = 6371
+# Cost calculation to calculate the cost of the distance between a store and a customer
 
-    lat1, lon1, lat2, lon2 = map(
-        radians,
-        [lat1, lon1, lat2, lon2]
-    )
+def fulfilment_cost(fixed_cost,cost_per_km,distance):
+    fulfil_cost = round(fixed_cost+ (cost_per_km * distance),2)
+    return fulfil_cost
+        
 
-    dlat = lat2 - lat1
-    dlon = lon2 - lon1
-
-    a = (
-        sin(dlat / 2) ** 2
-        + cos(lat1)
-        * cos(lat2)
-        * sin(dlon / 2) ** 2
-    )
-
-    c = 2 * asin(sqrt(a))
-
-    return round(
-        earth_radius * c,
-        2
-    )
+# how each store is selected
 
 
-# ==================================================
-# COST FUNCTION
-# ==================================================
+def select_best_store(stores, order_quantity, customer_lati, customer_longi):
 
-def fulfilment_cost(
-        fixed_cost,
-        cost_per_km,
-        distance):
-
-    return round(
-        fixed_cost
-        + (cost_per_km * distance),
-        2
-    )
-
-
-# ==================================================
-# STORE SELECTION
-# ==================================================
-
-def select_best_store(
-        stores,
-        order_quantity,
-        customer_lat,
-        customer_lon):
-
-    candidate_stores = []
+    potential_stores = []
 
     for store in stores:
 
-        atp = calculate_atp(
-            store["on_hand"],
-            store["reserved"]
-        )
+        atp = calculate_atp(store["on_hand"], store["reserved"])
 
         if atp >= order_quantity:
 
-            distance = calc_distance(
-                store["lat"],
-                store["lon"],
-                customer_lat,
-                customer_lon
-            )
+            distance = calc_distance(store["lat"], store["lon"], customer_lati, customer_longi)
 
-            cost = fulfilment_cost(
-                fixed_cost=25,
-                cost_per_km=2,
-                distance=distance
-            )
+            cost = fulfilment_cost(fixed_cost=25, cost_per_km=2,distance=distance)
 
             candidate_stores.append({
 
@@ -190,9 +108,8 @@ def select_best_store(
     )
 
 
-# ==================================================
-# SAMPLE DATA FROM HTML DASHBOARD
-# ==================================================
+
+# sample data from HTML dashboard
 
 stores = [
 
@@ -222,65 +139,31 @@ stores = [
 
 ]
 
+# KPI calculations
 
-# ==================================================
-# KPI CALCULATIONS
-# ==================================================
+accuracy = inventory_accuracy(correct_records=94,total_records=100)
 
-accuracy = inventory_accuracy(
-    correct_records=94,
-    total_records=100
-)
+sub_rate = substitution_rate(substitutions=12,total_orders=100)
 
-sub_rate = substitution_rate(
-    substitutions=12,
-    total_orders=100
-)
+cancel_rate = cancellation_rate(cancellations=6,total_orders=100)
 
-cancel_rate = cancellation_rate(
-    cancellations=6,
-    total_orders=100
-)
-
-success_rate = fulfilment_success_rate(
-    fulfilled=82,
-    total_orders=100
-)
+success_rate = fulfil_success_rate(fulfilled=82,total_orders=100)
 
 
-# ==================================================
-# EOQ CALCULATIONS
-# ==================================================
-
-eoq = calculate_eoq(
-    demand=1200,
-    ordering_cost=150,
-    holding_cost=8
-)
-
-ss = safety_stock(
-    max_daily_demand=30,
-    average_daily_demand=20,
-    lead_time=4
-)
-
-rop = reorder_point(
-    average_daily_demand=20,
-    lead_time=3,
-    safety_stock_units=ss
-)
+# EOQ calculations
 
 
-# ==================================================
-# FULFILMENT EXAMPLE
-# ==================================================
+eoq = calculate_eoq(demand=1200,ordering_cost=150,holding_cost=8)
 
-best_store = select_best_store(
-    stores=stores,
-    order_quantity=10,
-    customer_lat=-25.7500,
-    customer_lon=28.2300
-)
+ss = safety_stock(max_daily_demand=30,average_daily_demand=20,lead_time=4)
+
+rop = reorder_point(average_daily_demand=20, lead_time=3, safety_stock=ss)
 
 
-# ==================================================
+
+# Fulfilment example
+
+
+best_store = select_best_store(stores=stores, order_quantity=10, customer_lati=-25.7500, customer_longi=28.2300)
+
+
