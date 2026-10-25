@@ -11,7 +11,7 @@ def inventory_discrepancy(system_stock, physical_stock):
     return discrepancy
 
 
-def inventory_accuracy(correct_records, total_records):
+def inventory_accuracy(correct_records, total_records): 
     accuracy = (correct_records/total_records) * 100
     return round(accuracy, 2)
 
