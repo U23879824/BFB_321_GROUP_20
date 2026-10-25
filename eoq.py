@@ -76,9 +76,11 @@ def select_best_store(stores, order_quantity, customer_lati, customer_longi):
      potential_stores = []
      
      for store in stores:
+        
         atp = calculate_atp(store["on_hand"], store["reserved"])
         if atp >= order_quantity:
-            distance = calc_distance(store["lati"], store["longi"], customer_lati, customer_longi)
+            distance = calc_distance(store["lati"], store["longi"], customer_lati, customer_longi
+                                     )
             cost = fulfilment_cost(fixed_cost=25, cost_per_km=2,distance=distance)
             potential_stores.append({"name": store["name"],"atp": atp,"distance": distance,"cost": cost})
 
