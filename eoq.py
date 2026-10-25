@@ -139,56 +139,53 @@ def reorder_point(average_daily_demand, lead_time, safety_stock):
 # KPI calculations to measure performance and efficiency of the inventory management system
 
 def substitution_rate(substitutions, total_orders):
+    """Calculate the rate of order substitutions.
+
+    Formula:
+        Substitution Rate (%) =
+        (Substituted Orders / Total Orders) * 100
+
+    Inputs:
+        substitutions: Number of orders requiring substitutions.
+        total_orders: Total customer orders.
+
+    Returns:
+        Percentage of orders requiring substitutions.
     """
-Calculate the rate of order substitutions.
-
-Formula:
-    Substitution Rate (%) =
-    (Substituted Orders / Total Orders) * 100
-
-Inputs:
-    substitutions: Number of orders requiring substitutions.
-    total_orders: Total customer orders.
-
-Returns:
-    Percentage of orders requiring substitutions.
-"""
     sub_rate = (substitutions / total_orders) * 100
     return round(sub_rate,2)
 
 def cancellation_rate(cancellations, total_orders):
+    """Calculate the rate at which orders are cancelled.
+
+    Formula:
+        Cancellation Rate (%) =
+        (Cancelled Orders / Total Orders) * 100
+
+    Inputs:
+        cancellations: Number of cancelled orders.
+        total_orders: Total customer orders.
+
+    Returns:
+        Percentage of cancelled orders.
     """
-Calculate the rate at which orders are cancelled.
-
-Formula:
-    Cancellation Rate (%) =
-    (Cancelled Orders / Total Orders) * 100
-
-Inputs:
-    cancellations: Number of cancelled orders.
-    total_orders: Total customer orders.
-
-Returns:
-    Percentage of cancelled orders.
-"""
     cancel_rate = (cancellations / total_orders) * 100
     return round(cancel_rate,2)
 
 def fulfil_success_rate(fulfilled, total_orders):
+    """Calculate fulfilment success rate.
+    
+    Formula:
+        Fulfilment Success Rate (%) =
+        (Fulfilled Orders / Total Orders) * 100
+
+    Inputs:
+        fulfilled: Number of successfully fulfilled orders.
+        total_orders: Total customer orders.
+
+    Returns:
+        Percentage of successfully fulfilled orders.
     """
-Calculate fulfilment success rate.
-
-Formula:
-    Fulfilment Success Rate (%) =
-    (Fulfilled Orders / Total Orders) * 100
-
-Inputs:
-    fulfilled: Number of successfully fulfilled orders.
-    total_orders: Total customer orders.
-
-Returns:
-    Percentage of successfully fulfilled orders.
-"""
     success_rate = (fulfilled / total_orders) * 100
     return round(success_rate,2)
 
@@ -196,25 +193,25 @@ Returns:
 # Distance calculation to measure the distance between store and customer 
 
 def calc_distance(lati1, longi1, lati2, longi2):
+    """Calculate the distance between a customer and a store
+
+    using the Haversine Formula-calculates the great-circle distance 
+    (the shortest "as-the-crow-flies" path along the surface) between two points on 
+    a sphere using their latitude and longitude coordinates.
+
+    Inputs:
+        lati1: Store latitude.
+        longi1: Store longitude.
+        lati2: Customer latitude.
+        longi2: Customer longitude.
+
+    Assumptions:
+        - The Earth is approximated as a sphere.
+        - Earth's average radius is 6371 km.
+    
+    Returns:
+        Distance between the store and customer in kilometres.
     """
-Calculate the distance between a customer and a store
-using the Haversine Formula-calculates the great-circle distance 
-(the shortest "as-the-crow-flies" path along the surface) between two points on 
-a sphere using their latitude and longitude coordinates.
-
-Inputs:
-    lati1: Store latitude.
-    longi1: Store longitude.
-    lati2: Customer latitude.
-    longi2: Customer longitude.
-
-Assumptions:
-    - The Earth is approximated as a sphere.
-    - Earth's average radius is 6371 km.
-
-Returns:
-    Distance between the store and customer in kilometres.
-"""
 
     earth_rad = 6371 # Average radius of Earth used to calculate distance between 2 geographical locations in km.
 
@@ -232,25 +229,24 @@ Returns:
 # Cost calculation to calculate the cost of the distance between a store and a customer.
 
 def fulfilment_cost(fixed_cost, cost_per_km, distance):
+    """Calculate total fulfilment cost.
+
+    Formula:
+        Fulfilment Cost =
+        Fixed Cost +
+        (Cost per Kilometre * Distance)
+
+    Inputs:
+        fixed_cost: Base delivery cost.
+        cost_per_km: Cost charged per kilometre travelled.
+        distance: Distance between store and customer.
+
+    Assumptions:
+        - Transport cost increases proportionally with distance.
+
+    Returns:
+        Estimated fulfilment cost.
     """
-Calculate total fulfilment cost.
-
-Formula:
-    Fulfilment Cost =
-    Fixed Cost +
-    (Cost per Kilometre * Distance)
-
-Inputs:
-    fixed_cost: Base delivery cost.
-    cost_per_km: Cost charged per kilometre travelled.
-    distance: Distance between store and customer.
-
-Assumptions:
-    - Transport cost increases proportionally with distance.
-
-Returns:
-    Estimated fulfilment cost.
-"""
     fulfil_cost = round(fixed_cost+ (cost_per_km * distance),2)
     return fulfil_cost
         
@@ -258,13 +254,12 @@ Returns:
 # How each store is selected.
 
 def select_best_store(stores, order_quantity, customer_lati, customer_longi):
-    """
-    Select the most cost-effective store for order fulfilment.
+    """Select the most cost-effective store for order fulfilment.
 
     Selection Criteria:
         - Store must have sufficient ATP inventory.
-        - A fulfilment cost is calculated for each eligible store.
-        - The store with the lowest fulfilment cost is selected.
+        -A fulfilment cost is calculated for each eligible store.
+        -The store with the lowest fulfilment cost is selected.
 
     Inputs:
         stores: List of store inventory records.
@@ -282,40 +277,20 @@ def select_best_store(stores, order_quantity, customer_lati, customer_longi):
 
     for store in stores:
 
-        atp = calculate_atp(
-            store["on_hand"],
-            store["reserved"]
-        )
+        atp = calculate_atp(store["on_hand"],store["reserved"])
 
         if atp >= order_quantity:
 
-            distance = calc_distance(
-                store["lati"],
-                store["longi"],
-                customer_lati,
-                customer_longi
-            )
+            distance = calc_distance(store["lati"],store["longi"],customer_lati,customer_longi)
 
-            cost = fulfilment_cost(
-                fixed_cost=25,
-                cost_per_km=2,
-                distance=distance
-            )
+            cost = fulfilment_cost(fixed_cost=25,cost_per_km=2,distance=distance)
 
-            potential_stores.append({
-                "name": store["name"],
-                "atp": atp,
-                "distance": distance,
-                "cost": cost
-            })
+            potential_stores.append({"name": store["name"],"atp": atp,"distance": distance,"cost": cost})
 
     if not potential_stores:
         return None
 
-    return min(
-        potential_stores,
-        key=lambda x: x["cost"]
-    )
+    return min(potential_stores,key=lambda x: x["cost"])
 
 
 
