@@ -2,29 +2,31 @@ from math import sqrt, radians, sin, cos, asin
 # Inventory functions to keep track of demand, stock levels, and discrepancies
 
 def calculate_atp(on_hand, reserved):
-    """
-    Calculation of Available-to-Promise (ATP) inventory:
-
-    Formula:
-    ATP = Stock on_hand - Reserved Stock
-
-    Inputs:
-    on_hand: Total physical inventory available.
-    reserved: Inventory allocated to existing customer orders.
-
-    Assumptions:
-    Inventory records are accurate.
-    Reserved stock cannot be allocated to another order.
-
-    Returns:
-    Inventory available for new customer orders.
-    """
     atp = on_hand - reserved
     return atp
+"""
+Calculation of Available-to-Promise (ATP) inventory:
+
+Formula:
+ATP = Stock on_hand - Reserved Stock
+
+Inputs:
+on_hand: Total physical inventory available.
+reserved: Inventory allocated to existing customer orders.
+
+Assumptions:
+Inventory records are accurate.
+Reserved stock cannot be allocated to another order.
+
+Returns:
+Inventory available for new customer orders.
+"""
 
 
 def inventory_discrepancy(system_stock, physical_stock):
-    """
+    discrepancy = system_stock - physical_stock
+    return discrepancy
+"""
     Calculate the difference between recorded and physical inventory.
 
     Formula:
@@ -40,12 +42,12 @@ def inventory_discrepancy(system_stock, physical_stock):
     Returns:
     Inventory discrepancy in units.
     """
-    discrepancy = system_stock - physical_stock
-    return discrepancy
 
 
-def inventory_accuracy(correct_records, total_records):
-    """
+def inventory_accuracy(correct_records, total_records): 
+    accuracy = (correct_records/total_records) * 100
+    return round(accuracy, 2)
+"""
     Calculate inventory record accuracy.
 
     Formula:
@@ -62,14 +64,13 @@ def inventory_accuracy(correct_records, total_records):
     Inventory accuracy percentage.
     """
 
-    accuracy = (correct_records/total_records) * 100
-    return round(accuracy, 2)
-
 
 # EOQ calclulations to determine optimal order quantities and safety stock levels and if there is enough stock in specific store locations
 
 def calculate_eoq(demand, ordering_cost, holding_cost):
-    """
+    eoq = round(sqrt((2 * demand * ordering_cost) / holding_cost),2)
+    return eoq
+"""
     Calculate Economic Order Quantity (EOQ).
 
     Formula:
@@ -89,12 +90,12 @@ def calculate_eoq(demand, ordering_cost, holding_cost):
     Returns:
     Optimal order quantity in units.
     """
-    eoq = round(sqrt((2 * demand * ordering_cost) / holding_cost),2)
-    return eoq
-
 
 def safety_stock(max_daily_demand, average_daily_demand, lead_time):
-    """
+    safety_stock = (max_daily_demand - average_daily_demand) * lead_time
+    return safety_stock
+
+"""
     Calculate safety stock.
 
     Formula:
@@ -111,12 +112,12 @@ def safety_stock(max_daily_demand, average_daily_demand, lead_time):
     Returns:
     Required safety stock in units.
     """
-    safety_stock = (max_daily_demand - average_daily_demand) * lead_time
-    return safety_stock
 
 
 def reorder_point(average_daily_demand, lead_time, safety_stock):
-    """
+    Rop = (average_daily_demand * lead_time) + safety_stock
+    return Rop
+"""
     Calculate the reorder point (ROP).
 
     Formula:
@@ -134,21 +135,60 @@ def reorder_point(average_daily_demand, lead_time, safety_stock):
     Returns:
     Inventory level at which a replenishment order should be placed.
     """
-    Rop = (average_daily_demand * lead_time) + safety_stock
-    return Rop
-
 
 # KPI calculations to measure performance and efficiency of the inventory management system
 
 def substitution_rate(substitutions, total_orders):
+    """
+Calculate the rate of order substitutions.
+
+Formula:
+    Substitution Rate (%) =
+    (Substituted Orders / Total Orders) * 100
+
+Inputs:
+    substitutions: Number of orders requiring substitutions.
+    total_orders: Total customer orders.
+
+Returns:
+    Percentage of orders requiring substitutions.
+"""
     sub_rate = (substitutions / total_orders) * 100
     return round(sub_rate,2)
 
 def cancellation_rate(cancellations, total_orders):
+    """
+Calculate the rate at which orders are cancelled.
+
+Formula:
+    Cancellation Rate (%) =
+    (Cancelled Orders / Total Orders) * 100
+
+Inputs:
+    cancellations: Number of cancelled orders.
+    total_orders: Total customer orders.
+
+Returns:
+    Percentage of cancelled orders.
+"""
     cancel_rate = (cancellations / total_orders) * 100
     return round(cancel_rate,2)
 
 def fulfil_success_rate(fulfilled, total_orders):
+    """
+Calculate fulfilment success rate.
+
+Formula:
+    Fulfilment Success Rate (%) =
+    (Fulfilled Orders / Total Orders) * 100
+
+Inputs:
+    fulfilled: Number of successfully fulfilled orders.
+    total_orders: Total customer orders.
+
+Returns:
+    Percentage of successfully fulfilled orders.
+"""
     success_rate = (fulfilled / total_orders) * 100
     return round(success_rate,2)
 
@@ -156,6 +196,25 @@ def fulfil_success_rate(fulfilled, total_orders):
 # Distance calculation to measure the distance between store and customer 
 
 def calc_distance(lati1, longi1, lati2, longi2):
+    """
+Calculate the distance between a customer and a store
+using the Haversine Formula-calculates the great-circle distance 
+(the shortest "as-the-crow-flies" path along the surface) between two points on 
+a sphere using their latitude and longitude coordinates.
+
+Inputs:
+    lati1: Store latitude.
+    longi1: Store longitude.
+    lati2: Customer latitude.
+    longi2: Customer longitude.
+
+Assumptions:
+    - The Earth is approximated as a sphere.
+    - Earth's average radius is 6371 km.
+
+Returns:
+    Distance between the store and customer in kilometres.
+"""
 
     earth_rad = 6371 # Average radius of Earth used to calculate distance between 2 geographical locations in km.
 
@@ -173,6 +232,25 @@ def calc_distance(lati1, longi1, lati2, longi2):
 # Cost calculation to calculate the cost of the distance between a store and a customer.
 
 def fulfilment_cost(fixed_cost, cost_per_km, distance):
+    """
+Calculate total fulfilment cost.
+
+Formula:
+    Fulfilment Cost =
+    Fixed Cost +
+    (Cost per Kilometre * Distance)
+
+Inputs:
+    fixed_cost: Base delivery cost.
+    cost_per_km: Cost charged per kilometre travelled.
+    distance: Distance between store and customer.
+
+Assumptions:
+    - Transport cost increases proportionally with distance.
+
+Returns:
+    Estimated fulfilment cost.
+"""
     fulfil_cost = round(fixed_cost+ (cost_per_km * distance),2)
     return fulfil_cost
         
@@ -180,20 +258,64 @@ def fulfilment_cost(fixed_cost, cost_per_km, distance):
 # How each store is selected.
 
 def select_best_store(stores, order_quantity, customer_lati, customer_longi):
-     potential_stores = []
-     
-     for store in stores:
-        
-        atp = calculate_atp(store["on_hand"], store["reserved"])
-        if atp >= order_quantity:
-            distance = calc_distance(store["lati"], store["longi"], customer_lati, customer_longi
-                                     )
-            cost = fulfilment_cost(fixed_cost=25, cost_per_km=2,distance=distance)
-            potential_stores.append({"name": store["name"],"atp": atp,"distance": distance,"cost": cost})
+    """
+    Select the most cost-effective store for order fulfilment.
 
-        if not potential_stores:
-            return None
-        return min(potential_stores,key=lambda x: x["cost"])
+    Selection Criteria:
+        - Store must have sufficient ATP inventory.
+        - A fulfilment cost is calculated for each eligible store.
+        - The store with the lowest fulfilment cost is selected.
+
+    Inputs:
+        stores: List of store inventory records.
+        order_quantity: Customer order quantity.
+        customer_lati: Customer latitude.
+        customer_longi: Customer longitude.
+
+    Returns:
+        Dictionary containing the selected store and
+        fulfilment information, or None if no store
+        can fulfil the order.
+    """
+
+    potential_stores = []
+
+    for store in stores:
+
+        atp = calculate_atp(
+            store["on_hand"],
+            store["reserved"]
+        )
+
+        if atp >= order_quantity:
+
+            distance = calc_distance(
+                store["lati"],
+                store["longi"],
+                customer_lati,
+                customer_longi
+            )
+
+            cost = fulfilment_cost(
+                fixed_cost=25,
+                cost_per_km=2,
+                distance=distance
+            )
+
+            potential_stores.append({
+                "name": store["name"],
+                "atp": atp,
+                "distance": distance,
+                "cost": cost
+            })
+
+    if not potential_stores:
+        return None
+
+    return min(
+        potential_stores,
+        key=lambda x: x["cost"]
+    )
 
 
 
