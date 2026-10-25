@@ -92,11 +92,11 @@ def select_best_store(stores, order_quantity, customer_lati, customer_longi):
 
 # Sample data from HTML dashboard
 
-stores = [{"name": "Hatfield","on_hand": 20,"reserved": 5,"lati": -25.7479,"longi": 28.2293},
-          {"name": "Hillcrest Boulevard","on_hand": 25,"reserved": 8,"lati": -25.7540,"longi": 28.2310},
-          {"name": "Menlyn Maine","on_hand": 18,"reserved": 3,"lati": -25.7850,"longi": 28.2750},
-          {"name": "Equestria","on_hand": 30,"reserved": 10,"lati": -25.7560,"longi": 28.2300},
-          {"name": "The Grove","on_hand": 15,"reserved": 5,"lati": -25.7600,"longi": 28.2200}]
+stores = [{"name": "Hatfield","on_hand": 30,"reserved": 10,"lati": -25.7479,"longi": 28.2293},
+          {"name": "Hillcrest Boulevard","on_hand": 21,"reserved": 6,"lati": -25.7540,"longi": 28.2310},
+          {"name": "Menlyn Maine","on_hand": 25,"reserved": 5,"lati": -25.7850,"longi": 28.2750},
+          {"name": "Equestria","on_hand": 35,"reserved": 12,"lati": -25.7560,"longi": 28.2300},
+          {"name": "The Grove","on_hand": 10,"reserved": 4,"lati": -25.7600,"longi": 28.2200}]
 
 # KPI calculations
 
