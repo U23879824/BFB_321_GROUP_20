@@ -8,11 +8,11 @@ def calculate_atp(on_hand, reserved):
 Calculation of Available-to-Promise (ATP) inventory:
 
 Formula:
-    ATP = Stock on_hand - Reserved Stock
+ATP = Stock on_hand - Reserved Stock
 
 Inputs:
-    on_hand: Total physical inventory available.
-    reserved: Inventory allocated to existing customer orders.
+on_hand: Total physical inventory available.
+reserved: Inventory allocated to existing customer orders.
 
 Assumptions:
 Inventory records are accurate.
@@ -30,11 +30,11 @@ def inventory_discrepancy(system_stock, physical_stock):
     Calculate the difference between recorded and physical inventory.
 
     Formula:
-        Discrepancy = System Stock - Physical Stock
+    Discrepancy = System Stock - Physical Stock
 
     Inputs:
-        system_stock: Quantity recorded in the system.
-        physical_stock: Quantity physically counted in store.
+    system_stock: Quantity recorded in the system.
+    physical_stock: Quantity physically counted in store.
 
     Assumptions:
     Physical stock count is accurate.
@@ -51,11 +51,11 @@ def inventory_accuracy(correct_records, total_records):
     Calculate inventory record accuracy.
 
     Formula:
-        Inventory Accuracy (%) = (Correct Records / Total Records) * 100
+    Inventory Accuracy (%) = (Correct Records / Total Records) * 100
 
     Inputs:
-        correct_records: Number of accurate inventory records.
-        total_records: Total inventory records assessed.
+    correct_records: Number of accurate inventory records.
+    total_records: Total inventory records assessed.
 
     Assumptions:
     Inventory audit results are reliable.
@@ -74,12 +74,12 @@ def calculate_eoq(demand, ordering_cost, holding_cost):
     Calculate Economic Order Quantity (EOQ).
 
     Formula:
-        EOQ = sqrt((2DS) / H)
+    EOQ = sqrt((2DS) / H)
 
     Inputs:
-        demand: Annual demand (units).
-        ordering_cost: Cost of placing one order.
-        holding_cost: Annual holding cost per unit.
+    demand: Annual demand (units).
+    ordering_cost: Cost of placing one order.
+    holding_cost: Annual holding cost per unit.
 
     Assumptions:
     Demand is constant.
@@ -99,7 +99,7 @@ def safety_stock(max_daily_demand, average_daily_demand, lead_time):
     Calculate safety stock.
 
     Formula:
-        Safety Stock = (Maximum Daily Demand - Average Daily Demand) * Lead Time
+    Safety Stock = (Maximum Daily Demand - Average Daily Demand) * Lead Time
 
     Inputs:
     max_daily_demand: Highest daily demand observed.
@@ -121,7 +121,7 @@ def reorder_point(average_daily_demand, lead_time, safety_stock):
     Calculate the reorder point (ROP).
 
     Formula:
-        ROP =(Average Daily Demand * Lead Time) + Safety Stock
+    ROP =(Average Daily Demand * Lead Time) + Safety Stock
 
     Inputs:
     average_daily_demand: Average units sold per day.
