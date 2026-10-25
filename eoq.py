@@ -2,31 +2,29 @@ from math import sqrt, radians, sin, cos, asin
 # Inventory functions to keep track of demand, stock levels, and discrepancies
 
 def calculate_atp(on_hand, reserved):
+    """
+    Calculation of Available-to-Promise (ATP) inventory:
+
+    Formula:
+    ATP = Stock on_hand - Reserved Stock
+
+    Inputs:
+    on_hand: Total physical inventory available.
+    reserved: Inventory allocated to existing customer orders.
+
+    Assumptions:
+    Inventory records are accurate.
+    Reserved stock cannot be allocated to another order.
+
+    Returns:
+    Inventory available for new customer orders.
+    """
     atp = on_hand - reserved
     return atp
-"""
-Calculation of Available-to-Promise (ATP) inventory:
-
-Formula:
-ATP = Stock on_hand - Reserved Stock
-
-Inputs:
-on_hand: Total physical inventory available.
-reserved: Inventory allocated to existing customer orders.
-
-Assumptions:
-Inventory records are accurate.
-Reserved stock cannot be allocated to another order.
-
-Returns:
-Inventory available for new customer orders.
-"""
 
 
 def inventory_discrepancy(system_stock, physical_stock):
-    discrepancy = system_stock - physical_stock
-    return discrepancy
-"""
+    """
     Calculate the difference between recorded and physical inventory.
 
     Formula:
@@ -42,12 +40,12 @@ def inventory_discrepancy(system_stock, physical_stock):
     Returns:
     Inventory discrepancy in units.
     """
+    discrepancy = system_stock - physical_stock
+    return discrepancy
 
 
-def inventory_accuracy(correct_records, total_records): 
-    accuracy = (correct_records/total_records) * 100
-    return round(accuracy, 2)
-"""
+def inventory_accuracy(correct_records, total_records):
+    """
     Calculate inventory record accuracy.
 
     Formula:
@@ -62,15 +60,16 @@ def inventory_accuracy(correct_records, total_records):
 
     Returns:
     Inventory accuracy percentage.
-    """
+    """ 
+    accuracy = (correct_records/total_records) * 100
+    return round(accuracy, 2)
+
 
 
 # EOQ calclulations to determine optimal order quantities and safety stock levels and if there is enough stock in specific store locations
 
 def calculate_eoq(demand, ordering_cost, holding_cost):
-    eoq = round(sqrt((2 * demand * ordering_cost) / holding_cost),2)
-    return eoq
-"""
+    """
     Calculate Economic Order Quantity (EOQ).
 
     Formula:
@@ -90,12 +89,12 @@ def calculate_eoq(demand, ordering_cost, holding_cost):
     Returns:
     Optimal order quantity in units.
     """
+    eoq = round(sqrt((2 * demand * ordering_cost) / holding_cost),2)
+    return eoq
+
 
 def safety_stock(max_daily_demand, average_daily_demand, lead_time):
-    safety_stock = (max_daily_demand - average_daily_demand) * lead_time
-    return safety_stock
-
-"""
+    """
     Calculate safety stock.
 
     Formula:
@@ -112,12 +111,12 @@ def safety_stock(max_daily_demand, average_daily_demand, lead_time):
     Returns:
     Required safety stock in units.
     """
+    safety_stock = (max_daily_demand - average_daily_demand) * lead_time
+    return safety_stock
 
 
 def reorder_point(average_daily_demand, lead_time, safety_stock):
-    Rop = (average_daily_demand * lead_time) + safety_stock
-    return Rop
-"""
+    """
     Calculate the reorder point (ROP).
 
     Formula:
@@ -135,6 +134,8 @@ def reorder_point(average_daily_demand, lead_time, safety_stock):
     Returns:
     Inventory level at which a replenishment order should be placed.
     """
+    Rop = (average_daily_demand * lead_time) + safety_stock
+    return Rop
 
 # KPI calculations to measure performance and efficiency of the inventory management system
 
