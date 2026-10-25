@@ -4,16 +4,65 @@ from math import sqrt, radians, sin, cos, asin
 def calculate_atp(on_hand, reserved):
     atp = on_hand - reserved
     return atp
+"""
+Calculation of Available-to-Promise (ATP) inventory:
+
+Formula:
+ATP = Stock on_hand - Reserved Stock
+
+Inputs:
+on_hand: Total physical inventory available.
+reserved: Inventory allocated to existing customer orders.
+
+Assumptions:
+Inventory records are accurate.
+Reserved stock cannot be allocated to another order.
+
+Returns:
+Inventory available for new customer orders.
+"""
 
 
 def inventory_discrepancy(system_stock, physical_stock):
     discrepancy = system_stock - physical_stock
     return discrepancy
+"""
+    Calculate the difference between recorded and physical inventory.
+
+    Formula:
+    Discrepancy = System Stock - Physical Stock
+
+    Inputs:
+    system_stock: Quantity recorded in the system.
+    physical_stock: Quantity physically counted in store.
+
+    Assumptions:
+    Physical stock count is accurate.
+
+    Returns:
+    Inventory discrepancy in units.
+    """
 
 
 def inventory_accuracy(correct_records, total_records): 
     accuracy = (correct_records/total_records) * 100
     return round(accuracy, 2)
+"""
+    Calculate inventory record accuracy.
+
+    Formula:
+    Inventory Accuracy (%) = (Correct Records / Total Records) * 100
+
+    Inputs:
+    correct_records: Number of accurate inventory records.
+    total_records: Total inventory records assessed.
+
+    Assumptions:
+    Inventory audit results are reliable.
+
+    Returns:
+    Inventory accuracy percentage.
+    """
 
 
 # EOQ calclulations to determine optimal order quantities and safety stock levels and if there is enough stock in specific store locations
@@ -21,34 +70,90 @@ def inventory_accuracy(correct_records, total_records):
 def calculate_eoq(demand, ordering_cost, holding_cost):
     eoq = round(sqrt((2 * demand * ordering_cost) / holding_cost),2)
     return eoq
+"""
+    Calculate Economic Order Quantity (EOQ).
 
-def safety_stock(max_daily_demand,average_daily_demand,lead_time):
+    Formula:
+    EOQ = sqrt((2DS) / H)
+
+    Inputs:
+    demand: Annual demand (units).
+    ordering_cost: Cost of placing one order.
+    holding_cost: Annual holding cost per unit.
+
+    Assumptions:
+    Demand is constant.
+    Lead time is constant.
+    Replenishment is instantaneous.
+    No stock-outs occur.
+
+    Returns:
+    Optimal order quantity in units.
+    """
+
+def safety_stock(max_daily_demand, average_daily_demand, lead_time):
     safety_stock = (max_daily_demand - average_daily_demand) * lead_time
     return safety_stock
 
-def reorder_point(average_daily_demand,lead_time,safety_stock):
+"""
+    Calculate safety stock.
+
+    Formula:
+    Safety Stock = (Maximum Daily Demand - Average Daily Demand) * Lead Time
+
+    Inputs:
+    max_daily_demand: Highest daily demand observed.
+    average_daily_demand: Average daily demand.
+    lead_time: Supplier lead time in days.
+
+    Assumptions:
+    Demand variability is the primary source of uncertainty.
+
+    Returns:
+    Required safety stock in units.
+    """
+
+
+def reorder_point(average_daily_demand, lead_time, safety_stock):
     Rop = (average_daily_demand * lead_time) + safety_stock
     return Rop
+"""
+    Calculate the reorder point (ROP).
 
+    Formula:
+    ROP =(Average Daily Demand * Lead Time) + Safety Stock
+
+    Inputs:
+    average_daily_demand: Average units sold per day.
+    lead_time: Supplier lead time in days.
+    safety_stock: Safety stock quantity.
+
+    Assumptions:
+    Demand is stable during lead time.
+    Safety stock is maintained.
+
+    Returns:
+    Inventory level at which a replenishment order should be placed.
+    """
 
 # KPI calculations to measure performance and efficiency of the inventory management system
 
-def substitution_rate(substitutions,total_orders):
+def substitution_rate(substitutions, total_orders):
     sub_rate = (substitutions / total_orders) * 100
     return round(sub_rate,2)
 
-def cancellation_rate(cancellations,total_orders):
+def cancellation_rate(cancellations, total_orders):
     cancel_rate = (cancellations / total_orders) * 100
     return round(cancel_rate,2)
 
-def fulfil_success_rate(fulfilled,total_orders):
+def fulfil_success_rate(fulfilled, total_orders):
     success_rate = (fulfilled / total_orders) * 100
     return round(success_rate,2)
 
 
 # Distance calculation to measure the distance between store and customer 
 
-def calc_distance(lati1,longi1,lati2,longi2):
+def calc_distance(lati1, longi1, lati2, longi2):
 
     earth_rad = 6371 # Average radius of Earth used to calculate distance between 2 geographical locations in km.
 
@@ -65,7 +170,7 @@ def calc_distance(lati1,longi1,lati2,longi2):
 
 # Cost calculation to calculate the cost of the distance between a store and a customer.
 
-def fulfilment_cost(fixed_cost,cost_per_km,distance):
+def fulfilment_cost(fixed_cost, cost_per_km, distance):
     fulfil_cost = round(fixed_cost+ (cost_per_km * distance),2)
     return fulfil_cost
         
@@ -98,22 +203,22 @@ stores = [{"name": "Hatfield","on_hand": 30,"reserved": 10,"lati": -25.7479,"lon
           {"name": "Equestria","on_hand": 35,"reserved": 12,"lati": -25.7560,"longi": 28.2300},
           {"name": "The Grove","on_hand": 10,"reserved": 4,"lati": -25.7600,"longi": 28.2200}]
 
-# KPI calculations
+# KPI we aim to achieve with this website 
 
-accuracy = inventory_accuracy(correct_records=94,total_records=100)
+accuracy = inventory_accuracy(correct_records=95,total_records=100)
 
-sub_rate = substitution_rate(substitutions=12,total_orders=100)
+sub_rate = substitution_rate(substitutions=10,total_orders=100)
 
-cancel_rate = cancellation_rate(cancellations=6,total_orders=100)
+cancel_rate = cancellation_rate(cancellations=5,total_orders=100)
 
-success_rate = fulfil_success_rate(fulfilled=82,total_orders=100)
+success_rate = fulfil_success_rate(fulfilled=85, total_orders=100)
 
 
 # EOQ calculations
 
-eoq = calculate_eoq(demand=1200,ordering_cost=150,holding_cost=8)
+eoq = calculate_eoq(demand=1000, ordering_cost=150, holding_cost=7)
 
-ss = safety_stock(max_daily_demand=30,average_daily_demand=20,lead_time=4)
+ss = safety_stock(max_daily_demand=30, average_daily_demand=20, lead_time=4)
 
 rop = reorder_point(average_daily_demand=20, lead_time=3, safety_stock=ss)
 
