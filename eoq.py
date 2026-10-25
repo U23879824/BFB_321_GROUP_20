@@ -15,11 +15,11 @@ Inputs:
     reserved: Inventory allocated to existing customer orders.
 
 Assumptions:
-    - Inventory records are accurate.
-    - Reserved stock cannot be allocated to another order.
+Inventory records are accurate.
+Reserved stock cannot be allocated to another order.
 
 Returns:
-    Inventory available for new customer orders.
+Inventory available for new customer orders.
 """
 
 
@@ -37,10 +37,10 @@ def inventory_discrepancy(system_stock, physical_stock):
         physical_stock: Quantity physically counted in store.
 
     Assumptions:
-        - Physical stock count is accurate.
+    Physical stock count is accurate.
 
     Returns:
-        Inventory discrepancy in units.
+    Inventory discrepancy in units.
     """
 
 
@@ -51,18 +51,17 @@ def inventory_accuracy(correct_records, total_records):
     Calculate inventory record accuracy.
 
     Formula:
-        Inventory Accuracy (%) =
-        (Correct Records / Total Records) * 100
+        Inventory Accuracy (%) = (Correct Records / Total Records) * 100
 
     Inputs:
         correct_records: Number of accurate inventory records.
         total_records: Total inventory records assessed.
 
     Assumptions:
-        - Inventory audit results are reliable.
+    Inventory audit results are reliable.
 
     Returns:
-        Inventory accuracy percentage.
+    Inventory accuracy percentage.
     """
 
 
@@ -83,13 +82,13 @@ def calculate_eoq(demand, ordering_cost, holding_cost):
         holding_cost: Annual holding cost per unit.
 
     Assumptions:
-        - Demand is constant.
-        - Lead time is constant.
-        - Replenishment is instantaneous.
-        - No stock-outs occur.
+    Demand is constant.
+    Lead time is constant.
+    Replenishment is instantaneous.
+    No stock-outs occur.
 
     Returns:
-        Optimal order quantity in units.
+    Optimal order quantity in units.
     """
 
 def safety_stock(max_daily_demand, average_daily_demand, lead_time):
@@ -100,19 +99,18 @@ def safety_stock(max_daily_demand, average_daily_demand, lead_time):
     Calculate safety stock.
 
     Formula:
-        Safety Stock =
-        (Maximum Daily Demand - Average Daily Demand) * Lead Time
+        Safety Stock = (Maximum Daily Demand - Average Daily Demand) * Lead Time
 
     Inputs:
-        max_daily_demand: Highest daily demand observed.
-        average_daily_demand: Average daily demand.
-        lead_time: Supplier lead time in days.
+    max_daily_demand: Highest daily demand observed.
+    average_daily_demand: Average daily demand.
+    lead_time: Supplier lead time in days.
 
     Assumptions:
-        - Demand variability is the primary source of uncertainty.
+    Demand variability is the primary source of uncertainty.
 
     Returns:
-        Required safety stock in units.
+    Required safety stock in units.
     """
 
 
@@ -123,21 +121,19 @@ def reorder_point(average_daily_demand, lead_time, safety_stock):
     Calculate the reorder point (ROP).
 
     Formula:
-        ROP =
-        (Average Daily Demand * Lead Time)
-        + Safety Stock
+        ROP =(Average Daily Demand * Lead Time) + Safety Stock
 
     Inputs:
-        average_daily_demand: Average units sold per day.
-        lead_time: Supplier lead time in days.
-        safety_stock: Safety stock quantity.
+    average_daily_demand: Average units sold per day.
+    lead_time: Supplier lead time in days.
+    safety_stock: Safety stock quantity.
 
     Assumptions:
-        - Demand is stable during lead time.
-        - Safety stock is maintained.
+    Demand is stable during lead time.
+    Safety stock is maintained.
 
     Returns:
-        Inventory level at which a replenishment order should be placed.
+    Inventory level at which a replenishment order should be placed.
     """
 
 # KPI calculations to measure performance and efficiency of the inventory management system
