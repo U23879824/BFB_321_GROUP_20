@@ -20,7 +20,9 @@ html {
 body {
     margin: 0;
     color: var(--text);
-    background: #edf2f5;
+    background: linear-gradient(#102944f2, #102944f5),
+        url("https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=700&q=80")
+        center / cover;
     font-family: "DM Sans", Arial, sans-serif;
     font-size: 13px;
 }
@@ -193,7 +195,7 @@ a {
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    background: white;
+    background: ;
     border-bottom: 1px solid var(--border);
 }
 
