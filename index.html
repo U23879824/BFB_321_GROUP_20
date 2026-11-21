@@ -1,614 +1,665 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stock Sync | Smarter Retail. Better Fulfilment</title>
+    <title>Stock Sync | Retail Inventory Dashboard</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-<div class="dashboard">
+<div class="layout">
 
-    <!-- LEFT SIDEBAR -->
+    <!-- ================= SIDEBAR ================= -->
     <aside class="sidebar">
-        <div class="brand">
-            <div class="brand-icon">SS</div>
+        <a href="#dashboard" class="brand">
+            <span class="brand-icon">↔</span>
+            <span class="brand-text">
+                <strong>Stock <em>Sync</em></strong>
+                <small>Smarter Retail. Better Fulfilment.</small>
+            </span>
+        </a>
+
+        <div class="selected-store">
+            <span class="store-icon">⌖</span>
             <div>
-                <h2>Stock<span>Sync</span></h2>
-                <p>Smarter Retail.<br>Better Fulfilment</p>
+                <small>SELECTED STORE</small>
+                <strong>Hatfield</strong>
+                <a href="https://www.google.com/maps/search/?api=1&query=Hatfield+Pretoria"
+                   target="_blank" rel="noopener">View store on GPS ↗</a>
             </div>
         </div>
 
-        <!-- SELECTED STORE ABOVE THE MAIN MENU -->
-        <div class="store-selector">
-            <label for="store">SELECTED STORE</label>
-            <select id="store" name="store">
-                <option>Hatfield</option>
-                <option>Hillcrest Boulevard</option>
-                <option>Menlyn Maine</option>
-                <option>Equestria</option>
-                <option>The Grove</option>
-            </select>
-            <p class="store-status"><span class="status-dot"></span> Store inventory overview</p>
-        </div>
+        <p class="nav-heading">MAIN MENU</p>
 
-        <div class="menu-heading">MAIN MENU</div>
-        <nav class="menu">
-            <a href="#overview" class="menu-link active">
-                <span class="menu-icon">▦</span> Overview
-            </a>
-            <a href="#inventory" class="menu-link">
-                <span class="menu-icon">▤</span> Inventory
-            </a>
-            <a href="#orders" class="menu-link">
-                <span class="menu-icon">🛒</span> Orders & Fulfilment
-            </a>
-            <a href="#returns" class="menu-link">
-                <span class="menu-icon">↩</span> Returned Stock
-            </a>
-            <a href="#replenishment" class="menu-link">
-                <span class="menu-icon">⟳</span> Replenishment
-            </a>
-            <a href="#reports" class="menu-link">
-                <span class="menu-icon">▥</span> Reports & KPIs
-            </a>
+        <nav class="nav" id="nav">
+            <a class="active" href="#dashboard"><span>🔵</span> Dashboard</a>
+            <a href="#inventory"><span>🔵</span> Inventory</a>
+            <a href="#returns"><span>🔵</span> Customer Returns</a>
+            <a href="#availability"><span>🔵</span> Store Availability</a>
+            <a href="#safety-stock"><span>🔵</span> Safety Stock &amp; EOQ</a>
+            <a href="#reports"><span>🔵</span> Reports &amp; KPIs</a>
+            <a href="#orders"><span>🔵</span> Online Orders</a>
         </nav>
 
-        <div class="sidebar-bottom">
-            <div class="sidebar-help-icon">?</div>
-            <div>
-                <strong>Stock Sync Support</strong>
-                <p>Inventory management</p>
-            </div>
+        <div class="sidebar-footer">
+            <strong>Stock Sync</strong>
+            <small>Retail stock visibility</small>
+            <small>Pretoria store network</small>
         </div>
     </aside>
 
-    <!-- MAIN DASHBOARD -->
-    <main class="main-content" id="overview">
+    <!-- ================= MAIN ================= -->
+    <main class="main" id="dashboard">
 
-        <!-- TOP BAR -->
         <header class="topbar">
             <div>
-                <p class="breadcrumb">Pretoria East Stores / <span>Inventory Overview</span></p>
-                <h1>Retail Stock Dashboard</h1>
+                <span class="small-label">RETAIL OPERATIONS</span>
+                <h2>Inventory Dashboard</h2>
             </div>
-
-            <div class="topbar-right">
-                <div class="date-label">
-                    <span>REPORT DATE</span>
-                    <strong>24 October 2026</strong>
-                </div>
-                <div class="user-avatar">SS</div>
+            <div class="top-actions">
+                <span class="online-indicator">Store Manager</span>
+                <span class="avatar" title="Qondi">Q</span>
             </div>
         </header>
 
-        <!-- FOOD VISUAL HERO -->
-        <section class="hero">
-            <div class="hero-overlay"></div>
-            <div class="hero-content">
-                <span class="hero-tag">PRETORIA RETAIL NETWORK</span>
-                <h2>Every product.<br>In the right place.</h2>
-                <p>Track stock, manage replenishment and keep your shelves ready for every customer.</p>
-                <a href="#inventory" class="hero-button">View inventory <span>→</span></a>
-            </div>
-            <div class="hero-caption">
-                <span class="hero-caption-dot"></span>
-                Smarter stock. Fresher shelves.
-            </div>
-        </section>
+        <div class="content">
 
-        <!-- KPI SUMMARY -->
-        <section class="section-block">
-            <div class="section-heading">
-                <div>
-                    <p class="eyebrow">AT A GLANCE</p>
-                    <h2>Inventory performance</h2>
+            <!-- HERO -->
+            <section class="hero">
+                <div class="hero-content">
+                    <span class="hero-tag">Pretoria East Store Network</span>
+                    <h1>Every item counted.<br><span>Every order connected.</span></h1>
+                    <p>
+                        Monitor store inventory, identify low-stock products, track customer
+                        returns and improve online order fulfilment across Pretoria retail stores.
+                    </p>
+                    <a class="primary-button" href="#inventory">View inventory <span>→</span></a>
                 </div>
-                <span class="live-label"><span></span> Store overview</span>
-            </div>
+            </section>
 
-            <div class="kpi-grid">
+            <!-- KPI CARDS -->
+            <section class="kpi-grid">
                 <article class="kpi-card">
-                    <div class="kpi-top">
-                        <span class="kpi-icon blue">▤</span>
-                        <span class="kpi-label">Total stock units</span>
-                    </div>
-                    <h3>12,480</h3>
-                    <p class="kpi-note">Units across the selected store</p>
-                    <div class="kpi-bottom">
-                        <span class="mini-bar blue-bar"></span>
-                        <span>Current stock on hand</span>
-                    </div>
+                    <div class="kpi-icon blue">▤</div>
+                    <p>Total units in stock</p>
+                    <h2>1,284</h2>
+                    <small>Across the sample inventory</small>
                 </article>
-
                 <article class="kpi-card">
-                    <div class="kpi-top">
-                        <span class="kpi-icon green">✓</span>
-                        <span class="kpi-label">Healthy stock</span>
-                    </div>
-                    <h3>78.4%</h3>
-                    <p class="kpi-note">Products above reorder level</p>
-                    <div class="kpi-bottom">
-                        <span class="trend-up">↑ 4.2%</span>
-                        <span>vs. previous period</span>
-                    </div>
+                    <div class="kpi-icon green">✓</div>
+                    <p>Available products</p>
+                    <h2>44</h2>
+                    <small>In stock or low stock</small>
                 </article>
-
                 <article class="kpi-card">
-                    <div class="kpi-top">
-                        <span class="kpi-icon orange">!</span>
-                        <span class="kpi-label">Low-stock products</span>
-                    </div>
-                    <h3>18</h3>
-                    <p class="kpi-note">Products at or below reorder point</p>
-                    <div class="kpi-bottom">
-                        <span class="trend-warning">Needs attention</span>
-                    </div>
+                    <div class="kpi-icon orange">!</div>
+                    <p>Low-stock products</p>
+                    <h2>14</h2>
+                    <small>Review replenishment needs</small>
                 </article>
-
                 <article class="kpi-card">
-                    <div class="kpi-top">
-                        <span class="kpi-icon purple">↩</span>
-                        <span class="kpi-label">Returned stock</span>
-                    </div>
-                    <h3>146</h3>
-                    <p class="kpi-note">Units received back from customers</p>
-                    <div class="kpi-bottom">
-                        <span class="trend-purple">Return processing</span>
-                    </div>
+                    <div class="kpi-icon red">×</div>
+                    <p>Out-of-stock products</p>
+                    <h2>6</h2>
+                    <small>May affect online orders</small>
                 </article>
-            </div>
-        </section>
-
-        <!-- STOCK ANALYTICS -->
-        <section class="analytics-grid" id="replenishment">
-
-            <!-- EOQ / STOCK QUANTITY GRAPH -->
-            <article class="panel stock-chart-panel">
-                <div class="panel-heading">
-                    <div>
-                        <p class="eyebrow">REPLENISHMENT PLANNING</p>
-                        <h2>Stock quantity vs reorder levels</h2>
-                        <p class="panel-subtitle">Compare available quantity with safety stock and reorder points.</p>
-                    </div>
-                    <span class="chart-menu">•••</span>
-                </div>
-
-                <div class="chart-legend">
-                    <span><i class="legend-square quantity-legend"></i> Stock quantity</span>
-                    <span><i class="legend-square safety-legend"></i> Safety stock</span>
-                    <span><i class="legend-square reorder-legend"></i> Reorder point</span>
-                </div>
-
-                <div class="stock-chart">
-                    <div class="axis-labels">
-                        <span>500</span>
-                        <span>400</span>
-                        <span>300</span>
-                        <span>200</span>
-                        <span>100</span>
-                        <span>0</span>
-                    </div>
-
-                    <div class="plot-area">
-                        <div class="grid-line line-500"></div>
-                        <div class="grid-line line-400"></div>
-                        <div class="grid-line line-300"></div>
-                        <div class="grid-line line-200"></div>
-                        <div class="grid-line line-100"></div>
-                        <div class="grid-line line-0"></div>
-
-                        <div class="reorder-line" title="Reorder point reference"></div>
-                        <div class="safety-line" title="Safety stock reference"></div>
-
-                        <div class="bars">
-                            <div class="bar-group">
-                                <div class="bar quantity-bar" style="height: 78%;">
-                                    <span>390</span>
-                                </div>
-                                <div class="bar safety-bar" style="height: 20%;"></div>
-                                <div class="bar-label">Maize meal</div>
-                            </div>
-
-                            <div class="bar-group">
-                                <div class="bar quantity-bar" style="height: 54%;">
-                                    <span>270</span>
-                                </div>
-                                <div class="bar safety-bar" style="height: 16%;"></div>
-                                <div class="bar-label">Cooking oil</div>
-                            </div>
-
-                            <div class="bar-group">
-                                <div class="bar quantity-bar low-bar" style="height: 28%;">
-                                    <span>140</span>
-                                </div>
-                                <div class="bar safety-bar" style="height: 18%;"></div>
-                                <div class="bar-label">Rice</div>
-                            </div>
-
-                            <div class="bar-group">
-                                <div class="bar quantity-bar" style="height: 68%;">
-                                    <span>340</span>
-                                </div>
-                                <div class="bar safety-bar" style="height: 22%;"></div>
-                                <div class="bar-label">Milk</div>
-                            </div>
-
-                            <div class="bar-group">
-                                <div class="bar quantity-bar low-bar" style="height: 36%;">
-                                    <span>180</span>
-                                </div>
-                                <div class="bar safety-bar" style="height: 20%;"></div>
-                                <div class="bar-label">Bread</div>
-                            </div>
-
-                            <div class="bar-group">
-                                <div class="bar quantity-bar" style="height: 86%;">
-                                    <span>430</span>
-                                </div>
-                                <div class="bar safety-bar" style="height: 24%;"></div>
-                                <div class="bar-label">Canned food</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="chart-explanation">
-                    <div class="explanation-icon">i</div>
-                    <p><strong>Replenishment tip:</strong> When available stock approaches the reorder point, plan a replenishment order before stock reaches safety stock.</p>
-                </div>
-            </article>
-
-            <!-- INVENTORY PIE CHART -->
-            <article class="panel category-panel">
-                <div class="panel-heading">
-                    <div>
-                        <p class="eyebrow">STOCK COMPOSITION</p>
-                        <h2>Inventory by category</h2>
-                        <p class="panel-subtitle">Share of units currently held.</p>
-                    </div>
-                    <span class="chart-menu">•••</span>
-                </div>
-
-                <div class="pie-chart-area">
-                    <div class="pie-chart">
-                        <div class="pie-hole">
-                            <strong>12.48k</strong>
-                            <span>Total units</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="pie-legend">
-                    <div><span class="pie-dot produce"></span><span>Fresh produce</span><strong>28%</strong></div>
-                    <div><span class="pie-dot pantry"></span><span>Pantry goods</span><strong>32%</strong></div>
-                    <div><span class="pie-dot dairy"></span><span>Dairy & chilled</span><strong>22%</strong></div>
-                    <div><span class="pie-dot household"></span><span>Household</span><strong>18%</strong></div>
-                </div>
-
-                <div class="category-footer">
-                    <span class="category-footer-icon">✦</span>
-                    <p>Pantry goods make up the largest share of current inventory.</p>
-                </div>
-            </article>
-        </section>
-
-        <!-- EOQ DETAILS -->
-        <section class="section-block">
-            <div class="section-heading">
-                <div>
-                    <p class="eyebrow">ORDER OPTIMISATION</p>
-                    <h2>Economic Order Quantity (EOQ)</h2>
-                    <p class="section-description">Suggested replenishment quantities to balance ordering and holding costs.</p>
-                </div>
-            </div>
-
-            <div class="eoq-grid">
-                <article class="eoq-card">
-                    <div class="eoq-card-top">
-                        <span class="eoq-icon">📦</span>
-                        <span class="eoq-tag">Suggested order</span>
-                    </div>
-                    <p class="eoq-product">Maize meal · 10 kg</p>
-                    <h3>240 <small>units</small></h3>
-                    <div class="eoq-progress"><span style="width: 72%;"></span></div>
-                    <div class="eoq-detail"><span>EOQ quantity</span><strong>240 units</strong></div>
-                    <div class="eoq-detail"><span>Reorder point</span><strong>160 units</strong></div>
+                <article class="kpi-card">
+                    <div class="kpi-icon purple">↩</div>
+                    <p>Customer returns</p>
+                    <h2>12</h2>
+                    <small>Illustrative return count</small>
                 </article>
+            </section>
 
-                <article class="eoq-card">
-                    <div class="eoq-card-top">
-                        <span class="eoq-icon">🛢️</span>
-                        <span class="eoq-tag">Suggested order</span>
-                    </div>
-                    <p class="eoq-product">Cooking oil · 2 L</p>
-                    <h3>180 <small>units</small></h3>
-                    <div class="eoq-progress orange-progress"><span style="width: 58%;"></span></div>
-                    <div class="eoq-detail"><span>EOQ quantity</span><strong>180 units</strong></div>
-                    <div class="eoq-detail"><span>Reorder point</span><strong>120 units</strong></div>
-                </article>
+            <!-- CHARTS -->
+            <section class="dashboard-grid">
 
-                <article class="eoq-card">
-                    <div class="eoq-card-top">
-                        <span class="eoq-icon">🥛</span>
-                        <span class="eoq-tag">Suggested order</span>
-                    </div>
-                    <p class="eoq-product">Long-life milk · 1 L</p>
-                    <h3>200 <small>units</small></h3>
-                    <div class="eoq-progress green-progress"><span style="width: 84%;"></span></div>
-                    <div class="eoq-detail"><span>EOQ quantity</span><strong>200 units</strong></div>
-                    <div class="eoq-detail"><span>Reorder point</span><strong>100 units</strong></div>
-                </article>
-            </div>
-
-            <p class="data-note">EOQ, stock quantities, safety stock and reorder points shown here are illustrative values for the dashboard layout. Replace them with your calculated or actual store data.</p>
-        </section>
-
-        <!-- INVENTORY TABLE -->
-        <section class="section-block" id="inventory">
-            <div class="section-heading inventory-heading">
-                <div>
-                    <p class="eyebrow">PRODUCT CONTROL</p>
-                    <h2>Inventory at a glance</h2>
-                    <p class="section-description">Review quantities, reorder points and product status.</p>
-                </div>
-                <a href="#inventory-table" class="outline-button">View all stock ↓</a>
-            </div>
-
-            <div class="panel table-panel" id="inventory-table">
-                <div class="table-toolbar">
-                    <div class="table-search">
-                        <span>⌕</span>
-                        <input type="search" placeholder="Search products or SKU..." aria-label="Search products">
-                    </div>
-                    <span class="table-count">Showing 5 products</span>
-                </div>
-
-                <div class="table-scroll">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Product</th>
-                                <th>SKU</th>
-                                <th>Quantity</th>
-                                <th>Safety stock</th>
-                                <th>Reorder point</th>
-                                <th>Stock status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><div class="product-cell"><span class="product-emoji maize">🌽</span><span><strong>Maize meal 10 kg</strong><small>Pantry goods</small></span></div></td>
-                                <td>SS-MZ010</td>
-                                <td><strong>390</strong> units</td>
-                                <td>100</td>
-                                <td>160</td>
-                                <td><span class="stock-status in-stock">In stock</span></td>
-                            </tr>
-                            <tr>
-                                <td><div class="product-cell"><span class="product-emoji oil">🫒</span><span><strong>Cooking oil 2 L</strong><small>Pantry goods</small></span></div></td>
-                                <td>SS-OI002</td>
-                                <td><strong>270</strong> units</td>
-                                <td>80</td>
-                                <td>120</td>
-                                <td><span class="stock-status in-stock">In stock</span></td>
-                            </tr>
-                            <tr>
-                                <td><div class="product-cell"><span class="product-emoji rice">🍚</span><span><strong>Rice 5 kg</strong><small>Pantry goods</small></span></div></td>
-                                <td>SS-RC005</td>
-                                <td><strong>140</strong> units</td>
-                                <td>90</td>
-                                <td>150</td>
-                                <td><span class="stock-status low-stock">Reorder soon</span></td>
-                            </tr>
-                            <tr>
-                                <td><div class="product-cell"><span class="product-emoji milk">🥛</span><span><strong>Long-life milk 1 L</strong><small>Dairy & chilled</small></span></div></td>
-                                <td>SS-MK001</td>
-                                <td><strong>340</strong> units</td>
-                                <td>110</td>
-                                <td>150</td>
-                                <td><span class="stock-status in-stock">In stock</span></td>
-                            </tr>
-                            <tr>
-                                <td><div class="product-cell"><span class="product-emoji bread">🍞</span><span><strong>Brown bread</strong><small>Bakery</small></span></div></td>
-                                <td>SS-BR001</td>
-                                <td><strong>180</strong> units</td>
-                                <td>100</td>
-                                <td>200</td>
-                                <td><span class="stock-status low-stock">Reorder soon</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
-
-        <!-- RETURNS: RETURNED STOCK GOES BACK INTO INVENTORY -->
-        <section class="section-block" id="returns">
-            <div class="section-heading">
-                <div>
-                    <p class="eyebrow">REVERSE INVENTORY FLOW</p>
-                    <h2>Returned stock to store</h2>
-                    <p class="section-description">Returned products must be checked before being added back to available inventory.</p>
-                </div>
-                <span class="return-total">146 units returned</span>
-            </div>
-
-            <div class="returns-layout">
-                <article class="panel returns-panel">
-                    <div class="return-intro">
-                        <div class="return-illustration">↩</div>
+                <!-- STOCK vs SAFETY STOCK -->
+                <article class="panel" id="safety-stock">
+                    <div class="panel-heading">
                         <div>
-                            <h3>Return stock processing</h3>
-                            <p>Inspect each returned item, record its condition and update stock only when it is approved for resale.</p>
+                            <h3>Stock Level vs Safety Stock</h3>
+                            <p>Compare available units with the safety-stock target (Hatfield).</p>
+                        </div>
+                        <span class="panel-icon">▥</span>
+                    </div>
+
+                    <div class="legend">
+                        <span><i class="dot blue-dot"></i> Current stock</span>
+                        <span><i class="dot orange-dot"></i> Safety stock</span>
+                    </div>
+
+                    <div class="bar-chart">
+                        <div class="chart-row">
+                            <span class="product-label">Milk 2L</span>
+                            <div class="bars">
+                                <div class="bar blue-bar" style="width:100%"></div>
+                                <div class="bar orange-bar" style="width:50%"></div>
+                            </div>
+                            <span class="chart-value ok">20 / 10</span>
+                        </div>
+                        <div class="chart-row">
+                            <span class="product-label">Bread</span>
+                            <div class="bars">
+                                <div class="bar blue-bar" style="width:60%"></div>
+                                <div class="bar orange-bar" style="width:75%"></div>
+                            </div>
+                            <span class="chart-value warn">12 / 15</span>
+                        </div>
+                        <div class="chart-row">
+                            <span class="product-label">Eggs</span>
+                            <div class="bars">
+                                <div class="bar blue-bar" style="width:30%"></div>
+                                <div class="bar orange-bar" style="width:60%"></div>
+                            </div>
+                            <span class="chart-value warn">6 / 12</span>
+                        </div>
+                        <div class="chart-row">
+                            <span class="product-label">Tomatoes</span>
+                            <div class="bars">
+                                <div class="bar blue-bar" style="width:40%"></div>
+                                <div class="bar orange-bar" style="width:60%"></div>
+                            </div>
+                            <span class="chart-value warn">8 / 12</span>
+                        </div>
+                        <div class="chart-row">
+                            <span class="product-label">Chicken</span>
+                            <div class="bars">
+                                <div class="bar blue-bar" style="width:75%"></div>
+                                <div class="bar orange-bar" style="width:50%"></div>
+                            </div>
+                            <span class="chart-value ok">15 / 10</span>
                         </div>
                     </div>
 
-                    <div class="return-steps">
-                        <div class="return-step">
-                            <span class="step-number">1</span>
-                            <div><strong>Receive return</strong><p>Record the returned product and quantity.</p></div>
+                    <div class="chart-axis">
+                        <span>0</span><span>5</span><span>10</span><span>15</span><span>20 units</span>
+                    </div>
+
+                </article>
+
+                <!-- INVENTORY STATUS PIE -->
+                <article class="panel">
+                    <div class="panel-heading">
+                        <div>
+                            <h3>Inventory Status</h3>
+                            <p>Distribution of product records by stock status.</p>
                         </div>
-                        <div class="return-step">
-                            <span class="step-number">2</span>
-                            <div><strong>Inspect condition</strong><p>Separate resaleable, damaged and expired items.</p></div>
-                        </div>
-                        <div class="return-step">
-                            <span class="step-number">3</span>
-                            <div><strong>Update inventory</strong><p>Approved items increase available stock; damaged items are kept separate.</p></div>
+                        <span class="panel-icon">◔</span>
+                    </div>
+
+                    <div class="pie-wrapper">
+                        <div class="pie-chart" role="img"
+                             aria-label="Pie chart: 60% in stock, 28% low stock, 12% out of stock">
+                            <div class="pie-centre">
+                                <strong>50</strong>
+                                <small>Products</small>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="return-equation">
-                        <span>Available stock after approved returns</span>
-                        <strong>Opening available stock + approved returns − sales − write-offs</strong>
+                    <div class="pie-legend">
+                        <div><i class="dot green-dot"></i><span>In stock</span><strong>60% · 30</strong></div>
+                        <div><i class="dot orange-dot"></i><span>Low stock</span><strong>28% · 14</strong></div>
+                        <div><i class="dot red-dot"></i><span>Out of stock</span><strong>12% · 6</strong></div>
                     </div>
                 </article>
 
-                <article class="panel return-summary">
-                    <p class="eyebrow">RETURN BREAKDOWN</p>
-                    <h3>146 <small>units received</small></h3>
-
-                    <div class="return-bar">
-                        <span class="return-bar-approved"></span>
-                        <span class="return-bar-inspection"></span>
-                        <span class="return-bar-damaged"></span>
+                <!-- EOQ -->
+                <article class="panel">
+                    <div class="panel-heading">
+                        <div>
+                            <h3>EOQ &amp; Reorder Point</h3>
+                            <p>Illustrative inventory replenishment cycle.</p>
+                        </div>
+                        <span class="panel-icon">↻</span>
                     </div>
 
-                    <div class="return-legend">
-                        <div><span class="return-dot approved"></span><span>Approved for resale</span><strong>98</strong></div>
-                        <div><span class="return-dot inspection"></span><span>Under inspection</span><strong>30</strong></div>
-                        <div><span class="return-dot damaged"></span><span>Damaged / expired</span><strong>18</strong></div>
+                    <div class="legend">
+                        <span><i class="dot blue-dot"></i> Inventory level</span>
+                        <span><i class="dot orange-dot"></i> Reorder point</span>
+                        <span><i class="dot green-dot"></i> Safety stock</span>
                     </div>
 
-                    <div class="return-callout">
-                        <strong>Inventory impact</strong>
-                        <p>Only the 98 approved units should be added to available stock. The other 48 units should remain excluded until resolved.</p>
+                    <svg class="eoq-svg" viewBox="0 0 560 280" role="img"
+                         aria-label="Sawtooth inventory graph with reorder point and safety stock lines">
+                        <!-- axes -->
+                        <line x1="50" y1="20" x2="50" y2="240" class="axis"/>
+                        <line x1="50" y1="240" x2="545" y2="240" class="axis"/>
+
+                        <!-- gridlines -->
+                        <line x1="50" y1="60"  x2="545" y2="60"  class="grid"/>
+                        <line x1="50" y1="100" x2="545" y2="100" class="grid"/>
+                        <line x1="50" y1="140" x2="545" y2="140" class="grid"/>
+                        <line x1="50" y1="180" x2="545" y2="180" class="grid"/>
+
+                        <!-- reorder point (y=120) and safety stock (y=200) -->
+                        <line x1="50" y1="120" x2="545" y2="120" class="line-rop"/>
+                        <line x1="50" y1="200" x2="545" y2="200" class="line-ss"/>
+                        <text x="540" y="113" text-anchor="end" class="lbl lbl-rop">Reorder point (ROP)</text>
+                        <text x="540" y="193" text-anchor="end" class="lbl lbl-ss">Safety stock (SS)</text>
+
+                        <!-- sawtooth: order arrives when stock hits safety stock -->
+                        <polygon class="saw-fill"
+                            points="50,40 170,200 170,40 290,200 290,40 410,200 410,40 530,200 530,240 50,240"/>
+                        <polyline class="saw-line"
+                            points="50,40 170,200 170,40 290,200 290,40 410,200 410,40 530,200"/>
+
+                        <!-- EOQ bracket -->
+                        <line x1="38" y1="40" x2="38" y2="200" class="bracket"/>
+                        <text x="30" y="125" text-anchor="middle" transform="rotate(-90 30 125)" class="lbl">EOQ (order quantity)</text>
+
+                        <text x="300" y="268" text-anchor="middle" class="lbl">Time →</text>
+                    </svg>
+
+                    <div class="eoq-definitions">
+                        <div><strong>EOQ</strong><span>Order quantity</span></div>
+                        <div><strong>ROP</strong><span>Reorder point</span></div>
+                        <div><strong>SS</strong><span>Safety stock</span></div>
                     </div>
+
                 </article>
-            </div>
 
-            <div class="panel table-panel returns-table-panel">
-                <div class="panel-heading compact-heading">
+                <!-- REPORTS / KPIs -->
+                <article class="panel" id="reports">
+                    <div class="panel-heading">
+                        <div>
+                            <h3>Reports &amp; Key Performance Indicators</h3>
+                            <p>Simple visual summary of sample retail performance.</p>
+                        </div>
+                        <span class="panel-icon">▧</span>
+                    </div>
+
+                    <div class="kpi-report">
+                        <div class="report-item">
+                            <div class="report-label"><span>Stock availability</span><strong>94%</strong></div>
+                            <div class="progress-track"><div class="progress-fill green-fill" style="width:94%"></div></div>
+                        </div>
+                        <div class="report-item">
+                            <div class="report-label"><span>Online order fulfilment</span><strong>87%</strong></div>
+                            <div class="progress-track"><div class="progress-fill blue-fill" style="width:87%"></div></div>
+                        </div>
+                        <div class="report-item">
+                            <div class="report-label"><span>Stock discrepancy rate</span><strong>8%</strong></div>
+                            <div class="progress-track"><div class="progress-fill red-fill" style="width:8%"></div></div>
+                        </div>
+                        <div class="report-item">
+                            <div class="report-label"><span>Returns inspected</span><strong>75%</strong></div>
+                            <div class="progress-track"><div class="progress-fill orange-fill" style="width:75%"></div></div>
+                        </div>
+                    </div>
+
+                </article>
+            </section>
+
+            <!-- INVENTORY TABLE -->
+            <section class="panel section-panel" id="inventory">
+                <div class="panel-heading">
                     <div>
-                        <h3>Recent store returns</h3>
-                        <p class="panel-subtitle">Returned quantities and inventory treatment.</p>
+                        <h3>Product Inventory</h3>
+                        <p>Example quantities at the selected store and nearby branches.</p>
                     </div>
+                    <span class="panel-icon">▤</span>
                 </div>
+
+                <div class="table-tools">
+                    <input type="search" id="productSearch" placeholder="Search products or categories…"
+                           aria-label="Search products">
+                    <span class="table-count" id="rowCount"></span>
+                </div>
+
                 <div class="table-scroll">
-                    <table>
+                    <table id="inventoryTable">
                         <thead>
                             <tr>
-                                <th>Return reference</th>
                                 <th>Product</th>
-                                <th>Quantity</th>
-                                <th>Condition</th>
-                                <th>Inventory action</th>
+                                <th>Category</th>
+                                <th class="num">Hatfield</th>
+                                <th class="num">Hillcrest Blvd</th>
+                                <th class="num">Menlyn Maine</th>
+                                <th>Status (Hatfield)</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td>RET-1042</td>
-                                <td>Long-life milk 1 L</td>
-                                <td>24 units</td>
-                                <td><span class="stock-status in-stock">Approved</span></td>
-                                <td>Add to available stock</td>
+                                <td>Milk 2L</td><td>Dairy</td>
+                                <td class="num">20</td><td class="num">5</td><td class="num zero">0</td>
+                                <td><span class="status-good">In stock</span></td>
                             </tr>
                             <tr>
-                                <td>RET-1043</td>
-                                <td>Maize meal 10 kg</td>
-                                <td>18 units</td>
-                                <td><span class="stock-status review">Inspection</span></td>
-                                <td>Hold pending inspection</td>
+                                <td>Bread 700g</td><td>Bakery</td>
+                                <td class="num">12</td><td class="num">25</td><td class="num">18</td>
+                                <td><span class="status-low">Low stock</span></td>
                             </tr>
                             <tr>
-                                <td>RET-1044</td>
-                                <td>Cooking oil 2 L</td>
-                                <td>8 units</td>
-                                <td><span class="stock-status damaged">Damaged</span></td>
-                                <td>Exclude from available stock</td>
+                                <td>Eggs 18-pack</td><td>Dairy</td>
+                                <td class="num">6</td><td class="num">3</td><td class="num">10</td>
+                                <td><span class="status-low">Low stock</span></td>
+                            </tr>
+                            <tr>
+                                <td>Tomatoes 1kg</td><td>Produce</td>
+                                <td class="num">8</td><td class="num zero">0</td><td class="num">14</td>
+                                <td><span class="status-low">Low stock</span></td>
+                            </tr>
+                            <tr>
+                                <td>Chicken 1kg</td><td>Meat</td>
+                                <td class="num">15</td><td class="num">9</td><td class="num">7</td>
+                                <td><span class="status-good">In stock</span></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-            </div>
-        </section>
 
-        <!-- ORDERS AND FULFILMENT -->
-        <section class="section-block" id="orders">
-            <div class="section-heading">
-                <div>
-                    <p class="eyebrow">STORE OPERATIONS</p>
-                    <h2>Orders & fulfilment</h2>
+            </section>
+
+            <!-- CUSTOMER RETURNS -->
+            <section class="panel section-panel" id="returns">
+                <div class="panel-heading">
+                    <div>
+                        <h3>Customer Returns &amp; Stock Reconciliation</h3>
+                        <p>How an in-store return can affect store and online availability.</p>
+                    </div>
+                    <span class="panel-icon">↩</span>
                 </div>
-            </div>
 
-            <div class="fulfilment-grid">
-                <article class="fulfilment-card">
-                    <span class="fulfilment-icon blue">🛒</span>
-                    <div><p>Orders received</p><h3>284</h3><small>Orders in the current reporting period</small></div>
-                </article>
-                <article class="fulfilment-card">
-                    <span class="fulfilment-icon green">✓</span>
-                    <div><p>Fulfilled orders</p><h3>251</h3><small>Orders completed</small></div>
-                </article>
-                <article class="fulfilment-card">
-                    <span class="fulfilment-icon orange">◷</span>
-                    <div><p>Pending orders</p><h3>33</h3><small>Awaiting picking or fulfilment</small></div>
-                </article>
-            </div>
-        </section>
-
-        <!-- REPORT KPIs -->
-        <section class="section-block" id="reports">
-            <div class="section-heading">
-                <div>
-                    <p class="eyebrow">PERFORMANCE REPORT</p>
-                    <h2>Retail KPIs</h2>
-                    <p class="section-description">Measures that help store teams understand stock availability and fulfilment performance.</p>
+                <div class="return-flow">
+                    <div class="flow-step">
+                        <span>1</span>
+                        <strong>Customer returns item</strong>
+                        <p>Record product, quantity and return location.</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step">
+                        <span>2</span>
+                        <strong>Inspect the item</strong>
+                        <p>Check whether it is safe and suitable for resale.</p>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step">
+                        <span>3</span>
+                        <strong>Update stock records</strong>
+                        <p>Approved items become available for store and online orders.</p>
+                    </div>
                 </div>
-            </div>
+            </section>
 
-            <div class="report-grid">
-                <article class="report-card">
-                    <div class="report-card-heading"><span>Inventory accuracy</span><span class="report-icon">◎</span></div>
-                    <h3>96.8%</h3>
-                    <div class="report-track"><span style="width: 96.8%;"></span></div>
-                    <p>Recorded quantity compared with physical stock</p>
-                </article>
+            <!-- STORE DISTANCES -->
+            <section class="panel section-panel" id="availability">
+                <div class="panel-heading">
+                    <div>
+                        <h3>Store Network Distances</h3>
+                        <p>Distance between all 5 Pretoria stores. Pick a store to see how far it is from the others.</p>
+                    </div>
+                    <span class="panel-icon">⌖</span>
+                </div>
 
-                <article class="report-card">
-                    <div class="report-card-heading"><span>Order fulfilment rate</span><span class="report-icon">↗</span></div>
-                    <h3>88.4%</h3>
-                    <div class="report-track green-track"><span style="width: 88.4%;"></span></div>
-                    <p>Orders fulfilled out of total orders received</p>
-                </article>
+                <div class="store-picker" id="storePicker"></div>
 
-                <article class="report-card">
-                    <div class="report-card-heading"><span>Stockout rate</span><span class="report-icon">!</span></div>
-                    <h3>4.6%</h3>
-                    <div class="report-track orange-track"><span style="width: 46%;"></span></div>
-                    <p>Products unavailable when needed</p>
-                </article>
+                <div class="distance-layout">
+                    <div class="map-box">
+                        <svg class="store-map" id="storeMap" viewBox="0 0 560 360" role="img"
+                             aria-label="Schematic map of the five stores with distances from the selected store"></svg>
+                    </div>
 
-                <article class="report-card">
-                    <div class="report-card-heading"><span>Return approval rate</span><span class="report-icon">↩</span></div>
-                    <h3>67.1%</h3>
-                    <div class="report-track purple-track"><span style="width: 67.1%;"></span></div>
-                    <p>Returned units approved for resale</p>
-                </article>
-            </div>
-        </section>
+                    <div class="dist-list">
+                        <h4 id="listTitle"></h4>
+                        <ul id="distList"></ul>
+                        <a id="routeLink" class="route-button" target="_blank" rel="noopener">
+                            Open route through all 5 stores ↗
+                        </a>
+                        <p class="route-info" id="routeInfo"></p>
+                    </div>
+                </div>
 
+                <h4 class="sub-heading">Distance between every pair of stores (km)</h4>
+                <div class="table-scroll">
+                    <table class="dist-table" id="distanceMatrix"></table>
+                </div>
+
+
+            </section>
+
+            <!-- ONLINE ORDERS -->
+            <section class="panel section-panel" id="orders">
+                <div class="panel-heading">
+                    <div>
+                        <h3>Online Order Fulfilment</h3>
+                        <p>Illustrative examples of stock-related order risks.</p>
+                    </div>
+                    <span class="panel-icon">🛒</span>
+                </div>
+
+                <div class="table-scroll">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Order</th>
+                                <th>Product</th>
+                                <th>Store</th>
+                                <th class="num">Units requested</th>
+                                <th class="num">Units in store</th>
+                                <th>Example status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#SS1001</td><td>Milk 2L</td><td>Hatfield</td>
+                                <td class="num">2</td><td class="num">20</td>
+                                <td><span class="status-good">Available</span></td>
+                            </tr>
+                            <tr>
+                                <td>#SS1002</td><td>Eggs 18-pack</td><td>Hillcrest Boulevard</td>
+                                <td class="num">4</td><td class="num">3</td>
+                                <td><span class="status-low">Insufficient stock</span></td>
+                            </tr>
+                            <tr>
+                                <td>#SS1003</td><td>Tomatoes 1kg</td><td>Menlyn Maine</td>
+                                <td class="num">2</td><td class="num">14</td>
+                                <td><span class="status-good">Available</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
 
             <footer>
                 <span>Stock Sync · Retail Inventory Management</span>
-            
+                
             </footer>
-
+        </div>
     </main>
 </div>
+
+<script>
+    // ---- Live product search ----
+    const search = document.getElementById('productSearch');
+    const rows = document.querySelectorAll('#inventoryTable tbody tr');
+    const count = document.getElementById('rowCount');
+
+    function filterRows() {
+        const q = search.value.trim().toLowerCase();
+        let shown = 0;
+        rows.forEach(r => {
+            const match = r.textContent.toLowerCase().includes(q);
+            r.style.display = match ? '' : 'none';
+            if (match) shown++;
+        });
+        count.textContent = `Showing ${shown} of ${rows.length} products`;
+    }
+    search.addEventListener('input', filterRows);
+    filterRows();
+
+    // ---- Sidebar highlight: follows clicks AND scrolling ----
+    const links = [...document.querySelectorAll('#nav a')];
+    const targets = links.map(a => document.querySelector(a.getAttribute('href')));
+    let locked = false;      // true while a clicked link is still scrolling into view
+    let unlockTimer = null;
+
+    function setActive(link) {
+        links.forEach(l => l.classList.toggle('active', l === link));
+    }
+
+    function unlockSoon(ms) {
+        clearTimeout(unlockTimer);
+        unlockTimer = setTimeout(() => { locked = false; }, ms);
+    }
+
+    // Click: highlight immediately and ignore scroll-spy until the scroll finishes
+    links.forEach(link => {
+        link.addEventListener('click', () => {
+            setActive(link);
+            locked = true;
+            unlockSoon(700);
+        });
+    });
+
+    // Scroll-spy: highlight the section whose top most recently passed the header
+    function updateOnScroll() {
+        if (locked) { unlockSoon(150); return; }
+
+        const line = 140; // px from the top of the viewport
+        let current = links[0]; // Dashboard by default
+        let bestTop = -Infinity;
+
+        targets.forEach((t, i) => {
+            if (!t || i === 0) return; // skip the Dashboard (whole page wrapper)
+            const top = t.getBoundingClientRect().top;
+            if (top <= line && top > bestTop) { bestTop = top; current = links[i]; }
+        });
+
+        setActive(current);
+    }
+    window.addEventListener('scroll', updateOnScroll, { passive: true });
+    updateOnScroll();
+
+    // ---- Store network distances ----
+    // Hatfield, Menlyn Maine and Equestria use suburb-centre coordinates.
+    // Hillcrest Boulevard and The Grove are approximate: edit lat/lng if you know the exact spot.
+    const STORES = [
+        { name: 'Hatfield',            lat: -25.7480, lng: 28.2380, q: 'Hatfield Pretoria' },
+        { name: 'Hillcrest Boulevard', lat: -25.7560, lng: 28.2300, q: 'Hillcrest Boulevard Pretoria' },
+        { name: 'Menlyn Maine',        lat: -25.7834, lng: 28.2775, q: 'Menlyn Maine Pretoria' },
+        { name: 'Equestria',           lat: -25.7630, lng: 28.3370, q: 'Equestria Pretoria' },
+        { name: 'The Grove',           lat: -25.7850, lng: 28.3040, q: 'The Grove Mall Pretoria' }
+    ];
+
+    function distKm(a, b) {
+        const rad = d => d * Math.PI / 180;
+        const dLat = rad(b.lat - a.lat), dLng = rad(b.lng - a.lng);
+        const h = Math.sin(dLat / 2) ** 2 +
+                  Math.cos(rad(a.lat)) * Math.cos(rad(b.lat)) * Math.sin(dLng / 2) ** 2;
+        return 2 * 6371 * Math.asin(Math.sqrt(h));
+    }
+
+    const enc = encodeURIComponent;
+    const dirLink = (a, b) =>
+        `https://www.google.com/maps/dir/?api=1&origin=${enc(a.q)}&destination=${enc(b.q)}&travelmode=driving`;
+
+    let fromIdx = 0;
+
+    function renderPicker() {
+        document.getElementById('storePicker').innerHTML =
+            '<span class="picker-label">From:</span>' +
+            STORES.map((s, i) =>
+                `<button type="button" class="store-chip${i === fromIdx ? ' active' : ''}" data-i="${i}">${s.name}</button>`
+            ).join('');
+    }
+
+    function renderMap() {
+        const W = 560, H = 360, pad = 75;
+        const meanLat = STORES.reduce((t, s) => t + s.lat, 0) / STORES.length;
+        const k = Math.cos(meanLat * Math.PI / 180);
+        const raw = STORES.map(s => ({ x: s.lng * k, y: -s.lat }));
+        const minX = Math.min(...raw.map(p => p.x)), maxX = Math.max(...raw.map(p => p.x));
+        const minY = Math.min(...raw.map(p => p.y)), maxY = Math.max(...raw.map(p => p.y));
+        const scale = Math.min((W - 2 * pad) / (maxX - minX), (H - 2 * pad) / (maxY - minY));
+        const offX = (W - (maxX - minX) * scale) / 2;
+        const offY = (H - (maxY - minY) * scale) / 2;
+        const pos = raw.map(p => ({ x: offX + (p.x - minX) * scale, y: offY + (p.y - minY) * scale }));
+
+        let lines = '', labels = '', dots = '';
+        STORES.forEach((s, i) => {
+            if (i === fromIdx) return;
+            const a = pos[fromIdx], b = pos[i];
+            const mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
+            const t = distKm(STORES[fromIdx], s).toFixed(1) + ' km';
+            lines += `<line class="link" x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}"/>`;
+            labels += `<rect class="link-bg" x="${mx - 26}" y="${my - 11}" width="52" height="22" rx="11"/>` +
+                      `<text class="link-text" x="${mx}" y="${my}">${t}</text>`;
+        });
+        STORES.forEach((s, i) => {
+            dots += `<circle class="dot${i === fromIdx ? ' sel' : ''}" data-i="${i}" cx="${pos[i].x}" cy="${pos[i].y}" r="${i === fromIdx ? 11 : 9}"/>` +
+                    `<text class="name" x="${pos[i].x}" y="${pos[i].y - 18}">${s.name}</text>`;
+        });
+        document.getElementById('storeMap').innerHTML = lines + labels + dots;
+    }
+
+    function renderList() {
+        const from = STORES[fromIdx];
+        const others = STORES
+            .map((s, i) => ({ s, i, d: distKm(from, s) }))
+            .filter(o => o.i !== fromIdx)
+            .sort((a, b) => a.d - b.d);
+        const max = others[others.length - 1].d;
+
+        document.getElementById('listTitle').textContent = `From ${from.name}`;
+        document.getElementById('distList').innerHTML = others.map(o => `
+            <li>
+                <a href="${dirLink(from, o.s)}" target="_blank" rel="noopener">
+                    <div class="dist-row"><strong>${o.s.name}</strong><span>${o.d.toFixed(1)} km</span></div>
+                    <div class="dist-bar"><i style="width:${(o.d / max * 100).toFixed(0)}%"></i></div>
+                </a>
+            </li>`).join('');
+
+        // Route through all 5 stores: always go to the nearest unvisited store next
+        const order = [fromIdx];
+        const left = STORES.map((_, i) => i).filter(i => i !== fromIdx);
+        while (left.length) {
+            const last = STORES[order[order.length - 1]];
+            left.sort((a, b) => distKm(last, STORES[a]) - distKm(last, STORES[b]));
+            order.push(left.shift());
+        }
+        let total = 0;
+        for (let i = 1; i < order.length; i++) total += distKm(STORES[order[i - 1]], STORES[order[i]]);
+
+        const first = STORES[order[0]], end = STORES[order[order.length - 1]];
+        const via = order.slice(1, -1).map(i => enc(STORES[i].q)).join('%7C');
+        document.getElementById('routeLink').href =
+            `https://www.google.com/maps/dir/?api=1&origin=${enc(first.q)}&destination=${enc(end.q)}&waypoints=${via}&travelmode=driving`;
+        document.getElementById('routeInfo').textContent =
+            `Suggested order: ${order.map(i => STORES[i].name).join(' → ')} (about ${total.toFixed(1)} km in total).`;
+    }
+
+    function renderMatrix() {
+        const head = '<thead><tr><th>Store</th>' + STORES.map(s => `<th>${s.name}</th>`).join('') + '</tr></thead>';
+        const body = STORES.map((a, i) =>
+            `<tr class="${i === fromIdx ? 'sel-row' : ''}"><td>${a.name}</td>` +
+            STORES.map((b, j) => i === j
+                ? '<td class="self">—</td>'
+                : `<td><a href="${dirLink(a, b)}" target="_blank" rel="noopener">${distKm(a, b).toFixed(1)}</a></td>`
+            ).join('') + '</tr>'
+        ).join('');
+        document.getElementById('distanceMatrix').innerHTML = head + '<tbody>' + body + '</tbody>';
+    }
+
+    function renderStores() {
+        renderPicker(); renderMap(); renderList(); renderMatrix();
+    }
+
+    function pickStore(e) {
+        const el = e.target.closest('[data-i]');
+        if (!el) return;
+        fromIdx = Number(el.dataset.i);
+        renderStores();
+    }
+    document.getElementById('storePicker').addEventListener('click', pickStore);
+    document.getElementById('storeMap').addEventListener('click', pickStore);
+    renderStores();
+</script>
 </body>
 </html>
