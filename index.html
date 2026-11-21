@@ -367,6 +367,43 @@
 </div>
 
 
+<!-- B3.1 Flow 3: Place Customer Order -->
+<div class="order-section">
+    <h4>Place Customer Order</h4>
+    <p>Check stock availability and place an order.</p>
+
+    <form id="placeOrderForm">
+        <label for="orderProduct">Product</label>
+        <select id="orderProduct" required>
+            <option value="">Select product</option>
+            <option value="Milk 2L">Milk 2L</option>
+            <option value="Bread 700g">Bread 700g</option>
+            <option value="Eggs 18-pack">Eggs 18-pack</option>
+            <option value="Tomatoes 1kg">Tomatoes 1kg</option>
+            <option value="Chicken 1kg">Chicken 1kg</option>
+        </select>
+
+        <label for="orderStore">Store</label>
+        <select id="orderStore" required>
+            <option value="">Select store</option>
+            <option value="Hatfield">Hatfield</option>
+            <option value="Hillcrest Blvd">Hillcrest Blvd</option>
+            <option value="Menlyn Maine">Menlyn Maine</option>
+        </select>
+
+        <label for="orderQuantity">Order quantity</label>
+        <input type="number" id="orderQuantity"
+               min="1" step="1" required>
+
+        <button type="submit" id="placeOrderBtn">
+            Place Order
+        </button>
+    </form>
+
+    <p id="orderMessage" role="status"></p>
+</div>
+
+
                 <div class="table-tools">
                     <input type="search" id="productSearch" placeholder="Search products or categories…"
                            aria-label="Search products">
@@ -843,6 +880,57 @@ document.getElementById("checkAvailabilityBtn")
 
         results.appendChild(row);
     });
+});
+</script>
+
+
+<!-- B3.1 Flow 3: Temporary order processing -->
+<script>
+document.getElementById("placeOrderForm")
+    .addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+    const product = document.getElementById("orderProduct").value;
+    const store = document.getElementById("orderStore").value;
+    const quantity = Number(
+        document.getElementById("orderQuantity").value
+    );
+
+    const message = document.getElementById("orderMessage");
+
+    if (!product || !store ||
+        !Number.isInteger(quantity) || quantity <= 0) {
+        message.textContent = "Please enter valid order details.";
+        return;
+    }
+
+    const availableStock = demoAvailability[product]?.[store];
+
+    if (availableStock === undefined) {
+        message.textContent = "Product or store not found.";
+        return;
+    }
+
+    if (availableStock < quantity) {
+        message.textContent =
+            `Insufficient stock. Only ${availableStock} units available.`;
+        return;
+    }
+
+    // Temporary demonstration: reduce stock in browser memory
+    demoAvailability[product][store] -= quantity;
+
+    message.textContent =
+        `Demo order successful! ${quantity} units of ${product} ` +
+        `allocated from ${store}. Remaining stock: ` +
+        `${demoAvailability[product][store]}. ` +
+        `Not saved to the database.`;
+
+    // Refresh Flow 2 results if this product is selected
+    if (document.getElementById("availabilityProduct").value === product) {
+        document.getElementById("checkAvailabilityBtn").click();
+    }
 });
 </script>
 

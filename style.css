@@ -666,3 +666,47 @@ footer {
     padding: 12px;
     border-bottom: 1px solid #ddd;
 }
+
+
+/* B3.1 - Place customer order */
+
+.order-section {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 24px;
+}
+
+.order-section h4 {
+    margin-bottom: 10px;
+}
+
+#placeOrderForm {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+}
+
+#placeOrderForm select,
+#placeOrderForm input {
+    padding: 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    max-width: 200px;
+}
+
+#placeOrderBtn {
+    background: #ff922b;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 18px;
+    cursor: pointer;
+}
+
+#orderMessage {
+    margin-top: 12px;
+    font-weight: 500;
+}
