@@ -307,6 +307,103 @@
                     <span class="panel-icon">▤</span>
                 </div>
 
+             
+<!-- B3: Update inventory form -->
+<div class="stock-update-form">
+    <h4>Update Store Inventory</h4>
+
+    <form id="updateStockForm">
+        <label for="stockProduct">Product</label>
+        <select id="stockProduct" required>
+            <option value="">Select product</option>
+            <option value="Milk 2L">Milk 2L</option>
+            <option value="Bread 700g">Bread 700g</option>
+            <option value="Eggs 18-pack">Eggs 18-pack</option>
+            <option value="Tomatoes 1kg">Tomatoes 1kg</option>
+            <option value="Chicken 1kg">Chicken 1kg</option>
+        </select>
+
+        <label for="stockStore">Store</label>
+        <select id="stockStore" required>
+            <option value="">Select store</option>
+            <option value="Hatfield">Hatfield</option>
+            <option value="Hillcrest Blvd">Hillcrest Blvd</option>
+            <option value="Menlyn Maine">Menlyn Maine</option>
+        </select>
+
+        <label for="stockQuantity">New stock quantity</label>
+        <input type="number" id="stockQuantity"
+               min="0" step="1" required>
+
+        <button type="submit" class="primary-button">
+            Update Stock
+        </button>
+    </form>
+
+    <p id="stockUpdateMessage" role="status"></p>
+</div>
+   
+
+<!-- B3.1 Flow 2: Product availability -->
+<div class="availability-section">
+    <h4>Check Product Availability</h4>
+    <p>View available stock across different stores.</p>
+
+    <label for="availabilityProduct">Select product</label>
+    <select id="availabilityProduct">
+        <option value="">Choose a product</option>
+        <option value="Milk 2L">Milk 2L</option>
+        <option value="Bread 700g">Bread 700g</option>
+        <option value="Eggs 18-pack">Eggs 18-pack</option>
+        <option value="Tomatoes 1kg">Tomatoes 1kg</option>
+        <option value="Chicken 1kg">Chicken 1kg</option>
+    </select>
+
+    <button type="button" id="checkAvailabilityBtn">
+        Check Availability
+    </button>
+
+    <div id="availabilityResults" aria-live="polite"></div>
+</div>
+
+
+<!-- B3.1 Flow 3: Place Customer Order -->
+<div class="order-section">
+    <h4>Place Customer Order</h4>
+    <p>Check stock availability and place an order.</p>
+
+    <form id="placeOrderForm">
+        <label for="orderProduct">Product</label>
+        <select id="orderProduct" required>
+            <option value="">Select product</option>
+            <option value="Milk 2L">Milk 2L</option>
+            <option value="Bread 700g">Bread 700g</option>
+            <option value="Eggs 18-pack">Eggs 18-pack</option>
+            <option value="Tomatoes 1kg">Tomatoes 1kg</option>
+            <option value="Chicken 1kg">Chicken 1kg</option>
+        </select>
+
+        <label for="orderStore">Store</label>
+        <select id="orderStore" required>
+            <option value="">Select store</option>
+            <option value="Hatfield">Hatfield</option>
+            <option value="Hillcrest Blvd">Hillcrest Blvd</option>
+            <option value="Menlyn Maine">Menlyn Maine</option>
+        </select>
+
+        <label for="orderQuantity">Order quantity</label>
+        <input type="number" id="orderQuantity"
+               min="1" step="1" required>
+
+        <button type="submit" id="placeOrderBtn">
+            Place Order
+        </button>
+    </form>
+
+    <p id="orderMessage" role="status"></p>
+</div>
+
+
                 <div class="table-tools">
                     <input type="search" id="productSearch" placeholder="Search products or categories…"
                            aria-label="Search products">
@@ -661,5 +758,182 @@
     document.getElementById('storeMap').addEventListener('click', pickStore);
     renderStores();
 </script>
+
+<!-- B3: Inventory update integration -->
+<script>
+document.getElementById("updateStockForm")
+    .addEventListener("submit", async function(event) {
+
+    event.preventDefault();
+
+    const product = document.getElementById("stockProduct").value;
+    const store = document.getElementById("stockStore").value;
+    const quantity = Number(
+        document.getElementById("stockQuantity").value
+    );
+
+    const message = document.getElementById("stockUpdateMessage");
+
+    if (!product || !store ||
+        !Number.isInteger(quantity) || quantity < 0) {
+        message.textContent = "Please enter valid stock information.";
+        return;
+    }
+
+    message.textContent = "Updating stock...";
+
+    try {
+        // Replace this URL with the endpoint provided by B2
+        const response = await fetch(
+            "http://127.0.0.1:5000/api/inventory",
+            {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    product: product,
+                    store: store,
+                    quantity: quantity
+                })
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || "Stock update failed.");
+        }
+
+        message.textContent = "Stock updated successfully!";
+
+        // Next: refresh the inventory table using API data.
+
+    } catch (error) {
+        message.textContent = "Error: " + error.message;
+        console.error("Inventory update error:", error);
+    }
+});
+</script>
+
+
+<!-- B3.1 Flow 2: Temporary availability data -->
+<script>
+const demoAvailability = {
+    "Milk 2L": {
+        "Hatfield": 20,
+        "Hillcrest Blvd": 35,
+        "Menlyn Maine": 12
+    },
+    "Bread 700g": {
+        "Hatfield": 15,
+        "Hillcrest Blvd": 25,
+        "Menlyn Maine": 8
+    },
+    "Eggs 18-pack": {
+        "Hatfield": 10,
+        "Hillcrest Blvd": 18,
+        "Menlyn Maine": 5
+    },
+    "Tomatoes 1kg": {
+        "Hatfield": 30,
+        "Hillcrest Blvd": 20,
+        "Menlyn Maine": 15
+    },
+    "Chicken 1kg": {
+        "Hatfield": 12,
+        "Hillcrest Blvd": 16,
+        "Menlyn Maine": 7
+    }
+};
+
+document.getElementById("checkAvailabilityBtn")
+    .addEventListener("click", function() {
+
+    const product = document.getElementById(
+        "availabilityProduct"
+    ).value;
+
+    const results = document.getElementById(
+        "availabilityResults"
+    );
+
+    results.replaceChildren();
+
+    if (!product) {
+        results.textContent = "Please select a product.";
+        return;
+    }
+
+    const stock = demoAvailability[product];
+
+    Object.entries(stock).forEach(([store, quantity]) => {
+        const row = document.createElement("div");
+        row.className = "availability-result";
+
+        const status = quantity > 0
+            ? "In Stock"
+            : "Out of Stock";
+
+        row.textContent =
+            `${store}: ${quantity} units — ${status}`;
+
+        results.appendChild(row);
+    });
+});
+</script>
+
+
+<!-- B3.1 Flow 3: Temporary order processing -->
+<script>
+document.getElementById("placeOrderForm")
+    .addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+    const product = document.getElementById("orderProduct").value;
+    const store = document.getElementById("orderStore").value;
+    const quantity = Number(
+        document.getElementById("orderQuantity").value
+    );
+
+    const message = document.getElementById("orderMessage");
+
+    if (!product || !store ||
+        !Number.isInteger(quantity) || quantity <= 0) {
+        message.textContent = "Please enter valid order details.";
+        return;
+    }
+
+    const availableStock = demoAvailability[product]?.[store];
+
+    if (availableStock === undefined) {
+        message.textContent = "Product or store not found.";
+        return;
+    }
+
+    if (availableStock < quantity) {
+        message.textContent =
+            `Insufficient stock. Only ${availableStock} units available.`;
+        return;
+    }
+
+    // Temporary demonstration: reduce stock in browser memory
+    demoAvailability[product][store] -= quantity;
+
+    message.textContent =
+        `Demo order successful! ${quantity} units of ${product} ` +
+        `allocated from ${store}. Remaining stock: ` +
+        `${demoAvailability[product][store]}. ` +
+        `Not saved to the database.`;
+
+    // Refresh Flow 2 results if this product is selected
+    if (document.getElementById("availabilityProduct").value === product) {
+        document.getElementById("checkAvailabilityBtn").click();
+    }
+});
+</script>
+
+
 </body>
 </html>
