@@ -116,3 +116,38 @@ VALUES
 ON DUPLICATE KEY UPDATE
     quantity_on_hand = VALUES(quantity_on_hand),
     reorder_level = VALUES(reorder_level);
+
+
+-- Seed data: Stock movements for all five StockSync stores
+-- Match inventory using store_id and product_id
+
+INSERT INTO stock_movements
+    (movement_id, inventory_id, movement_type, quantity, notes)
+VALUES
+-- StockSync Hatfield
+(1, (SELECT inventory_id FROM inventory WHERE store_id = 4 AND product_id = 1), 'IN', 50, 'New rice stock received'),
+(2, (SELECT inventory_id FROM inventory WHERE store_id = 4 AND product_id = 1), 'OUT', 20, 'Rice sold to customer'),
+(3, (SELECT inventory_id FROM inventory WHERE store_id = 4 AND product_id = 2), 'IN', 30, 'Milk delivery received'),
+(4, (SELECT inventory_id FROM inventory WHERE store_id = 4 AND product_id = 3), 'OUT', 15, 'Beverages sold'),
+
+-- StockSync Menlyn Maine
+(5, (SELECT inventory_id FROM inventory WHERE store_id = 5 AND product_id = 1), 'IN', 40, 'Rice delivery received'),
+(6, (SELECT inventory_id FROM inventory WHERE store_id = 5 AND product_id = 2), 'OUT', 10, 'Milk sold'),
+
+-- StockSync The Grove
+(7, (SELECT inventory_id FROM inventory WHERE store_id = 6 AND product_id = 1), 'IN', 25, 'Rice delivery received'),
+(8, (SELECT inventory_id FROM inventory WHERE store_id = 6 AND product_id = 2), 'OUT', 8, 'Milk sold'),
+
+-- StockSync Hillcrest
+(9, (SELECT inventory_id FROM inventory WHERE store_id = 7 AND product_id = 1), 'IN', 35, 'Rice delivery received'),
+(10, (SELECT inventory_id FROM inventory WHERE store_id = 7 AND product_id = 2), 'OUT', 12, 'Milk sold'),
+
+-- StockSync Equestria
+(11, (SELECT inventory_id FROM inventory WHERE store_id = 8 AND product_id = 1), 'IN', 30, 'Rice delivery received'),
+(12, (SELECT inventory_id FROM inventory WHERE store_id = 8 AND product_id = 2), 'OUT', 10, 'Milk sold')
+
+ON DUPLICATE KEY UPDATE
+    inventory_id = VALUES(inventory_id),
+    movement_type = VALUES(movement_type),
+    quantity = VALUES(quantity),
+    notes = VALUES(notes);
