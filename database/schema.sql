@@ -76,3 +76,21 @@ CREATE TABLE IF NOT EXISTS inventory (
         CHECK (reorder_level >= 0)
 );
 
+-- Table 5: Stock Movements
+CREATE TABLE IF NOT EXISTS stock_movements (
+    movement_id INT AUTO_INCREMENT PRIMARY KEY,
+    inventory_id INT NOT NULL,
+    movement_type ENUM('IN', 'OUT', 'ADJUSTMENT') NOT NULL,
+    quantity INT NOT NULL,
+    movement_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    notes VARCHAR(255),
+
+    CONSTRAINT fk_movement_inventory
+        FOREIGN KEY (inventory_id)
+        REFERENCES inventory(inventory_id),
+
+    CONSTRAINT chk_movement_quantity
+        CHECK (quantity > 0)
+);
+
+
