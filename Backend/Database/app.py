@@ -1,4 +1,4 @@
- 
+
 import logging
 import os
 from pathlib import Path
@@ -14,7 +14,7 @@ from Backend.Routes.inventory import inventory_bp
 from Backend.Routes.reference_data import reference_bp
 
 
-def create_app():
+def create_app():S
     app = Flask(__name__)
 
     environment = os.getenv("FLASK_ENV", "development")
