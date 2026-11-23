@@ -1,5 +1,4 @@
-
-# Private environment variables
+# Environment variables and private settings
 .env
 .env.*
 !.env.example
@@ -7,23 +6,27 @@
 # Python virtual environments
 .venv/
 venv/
+env/
 
 # Python cache files
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
 
-# Local logs
+# Log files
 *.log
 logs/
 
-# Test and coverage cache
+# Testing and coverage files
 .pytest_cache/
 .coverage
 htmlcov/
 
-# Local editor and operating system files
+# IDE and editor settings
+.vscode/
+
+# Operating system files
 .DS_Store
 Thumbs.db
-.env
-__pycache__/
+desktop.ini
 
