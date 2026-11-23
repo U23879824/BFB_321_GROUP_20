@@ -760,6 +760,7 @@
 </script>
 
 <!-- B3: Inventory update integration -->
+<!----
 <script>
 document.getElementById("updateStockForm")
     .addEventListener("submit", async function(event) {
@@ -815,6 +816,7 @@ document.getElementById("updateStockForm")
     }
 });
 </script>
+-->
 
 
 <!-- B3.1 Flow 2: Temporary availability data -->
@@ -920,6 +922,7 @@ document.getElementById("placeOrderForm")
 
     // Temporary demonstration: reduce stock in browser memory
     demoAvailability[product][store] -= quantity;
+    updateInventoryTable();
 
     message.textContent =
         `Demo order successful! ${quantity} units of ${product} ` +
@@ -931,6 +934,96 @@ document.getElementById("placeOrderForm")
     if (document.getElementById("availabilityProduct").value === product) {
         document.getElementById("checkAvailabilityBtn").click();
     }
+});
+</script>
+
+<script>
+
+function updateInventoryTable() {
+    const rows = document.querySelectorAll(
+        "#inventoryTable tbody tr"
+    );
+
+    rows.forEach(row => {
+        const cells = row.querySelectorAll("td");
+        const product = cells[0].textContent.trim();
+
+        if (!demoAvailability[product]) return;
+
+        const stock = demoAvailability[product];
+
+        cells[2].textContent = stock["Hatfield"];
+        cells[3].textContent = stock["Hillcrest Blvd"];
+        cells[4].textContent = stock["Menlyn Maine"];
+
+        // Update the Hatfield stock status
+        const hatfieldStock = stock["Hatfield"];
+        const status = cells[5];
+
+        if (hatfieldStock === 0) {
+            status.innerHTML =
+                '<span class="status-low">Out of stock</span>';
+        } else if (hatfieldStock <= 12) {
+            status.innerHTML =
+                '<span class="status-low">Low stock</span>';
+        } else {
+            status.innerHTML =
+                '<span class="status-good">In stock</span>';
+        }
+
+        // Highlight zero stock
+        [2, 3, 4].forEach(index => {
+            cells[index].classList.toggle(
+                "zero",
+                Number(cells[index].textContent) === 0
+            );
+        });
+    });
+}
+
+</script>
+
+
+<!-- B3.2: Temporary Update Stock functionality -->
+<script>
+document.getElementById("updateStockForm")
+    .addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+    const product = document.getElementById("stockProduct").value;
+    const store = document.getElementById("stockStore").value;
+    const quantityInput = document.getElementById("stockQuantity");
+    const quantity = Number(quantityInput.value);
+    const message = document.getElementById("stockUpdateMessage");
+
+    if (!product || !store ||
+        quantityInput.value.trim() === "" ||
+        !Number.isInteger(quantity) || quantity < 0) {
+        message.textContent = "Please enter valid stock information.";
+        return;
+    }
+
+    if (!demoAvailability[product] ||
+        !(store in demoAvailability[product])) {
+        message.textContent = "Product or store not found.";
+        return;
+    }
+
+    // Update shared temporary inventory
+    demoAvailability[product][store] = quantity;
+
+    // Refresh the main inventory table
+    updateInventoryTable();
+
+    // Refresh the availability results
+    if (document.getElementById("availabilityProduct").value === product) {
+        document.getElementById("checkAvailabilityBtn").click();
+    }
+
+    message.textContent =
+        `Demo stock updated! ${product} at ${store}: ` +
+        `${quantity} units. Not saved to the database.`;
 });
 </script>
 
