@@ -1,72 +1,57 @@
+ # StockSync REST API Documentation
 
-# StockSync REST API
+## 1. Introduction
 
-## 1. Project Description
+The StockSync REST API is developed using Python and Flask to support the StockSync inventory management application.
 
-StockSync is a Flask-based REST API developed to support the StockSync inventory management system.
-
-The API communicates with the MySQL database developed in Part B1.
-
-It provides functionality for managing products, inventory records and stock movements.
+The API allows users to retrieve, create and update product and inventory information stored in the MySQL database.
 
 ## 2. Technologies Used
 
-- Python 3.14
-- Flask 3.1.3
+- Python
+- Flask
 - MySQL
-- mysql-connector-python
-- python-dotenv
+- MySQL Connector
+- Python-dotenv
 
-## 3. Application Structure
+## 3. Database Structure
 
-Backend/
-- Routes/
-  - products.py
-  - inventory.py
-- Models/
-- Database/
-- app.py
-- config.py
-- db.py
-- .env
-- requirements.txt
-- README.md
+The API uses the existing StockSync database, which contains:
+
+- Products
+- Categories
+- Stores
+- Inventory
+- Stock Movements
 
 ## 4. API Endpoints
 
-| Method | Endpoint | Description |
+| HTTP Method | Endpoint | Description |
 |---|---|---|
-| GET | /api/products | Retrieve products |
-| GET | /api/products/{id} | Retrieve one product |
+| GET | /api/products | Retrieve all products |
+| GET | /api/products/{product_id} | Retrieve one product |
 | POST | /api/products | Create a product |
-| PUT | /api/products/{id} | Update a product |
-| GET | /api/inventory | Retrieve inventory |
-| GET | /api/inventory/{id} | Retrieve one inventory record |
-| PATCH | /api/inventory/{id} | Update inventory |
-| POST | /api/stock-movements | Record a stock movement |
+| PUT | /api/products/{product_id} | Update a complete product |
+| PATCH | /api/products/{product_id} | Partially update a product |
+| GET | /api/inventory | Retrieve inventory records |
+| GET | /api/inventory/{inventory_id} | Retrieve one inventory record |
+| POST | /api/inventory | Create an inventory record |
+| PATCH | /api/inventory/{inventory_id} | Update inventory |
+| POST | /api/stock-movements | Record stock movements |
+| GET | /api/categories | Retrieve categories |
+| GET | /api/stores | Retrieve stores |
 
-## 5. Pagination and Filtering
-
-The products endpoint supports pagination and filtering.
-
-Example:
-
-GET /api/products?page=1&size=10&category=Groceries
-
-The inventory endpoint supports filtering by store and product.
-
-Example:
-
-GET /api/inventory?page=1&size=10&store_id=4
-
-## 6. Request and Response Examples
+## 5. Product API JSON Structure
 
 ### Create Product
 
-POST /api/products
+HTTP Method: POST
+
+Endpoint: /api/products
 
 Request:
 
+```json
 {
   "product_name": "Bread 700g",
   "sku": "GRO008",
@@ -74,100 +59,158 @@ Request:
   "unit_price": 18.99,
   "description": "White bread"
 }
+```
 
-Successful response:
+Successful response: HTTP 201 Created.
 
+```json
 {
   "success": true,
   "message": "Product created successfully.",
   "product_id": 8
 }
+```
 
-Status code: 201 Created
+### Retrieve Products
+
+HTTP Method: GET
+
+Endpoint: /api/products
+
+Example:
+
+`/api/products?page=1&size=10`
+
+The response contains product information and pagination details.
 
 ### Update Product
 
-PUT /api/products/1
+HTTP Method: PUT
+
+Endpoint: /api/products/1
 
 Request:
 
+```json
 {
   "product_name": "Rice 2kg Premium",
-  "unit_price": 54.99
+  "sku": "GRO001",
+  "category_id": 1,
+  "unit_price": 54.99,
+  "description": "Premium rice"
 }
+```
 
-Successful response:
+Successful response: HTTP 200 OK.
 
-{
-  "success": true,
-  "message": "Product updated successfully.",
-  "product_id": 1
-}
+## 6. Inventory API JSON Structure
 
-Status code: 200 OK
+### Create Inventory
 
-### Record Stock Movement
+HTTP Method: POST
 
-POST /api/stock-movements
+Endpoint: /api/inventory
 
 Request:
 
+```json
 {
-  "inventory_id": 1,
-  "movement_type": "IN",
-  "quantity": 20,
-  "notes": "New stock received"
+  "store_id": 4,
+  "product_id": 1,
+  "quantity_on_hand": 100,
+  "reorder_level": 20
 }
+```
 
-Successful response:
+### Update Inventory
 
+HTTP Method: PATCH
+
+Endpoint: /api/inventory/1
+
+Request:
+
+```json
 {
-  "success": true,
-  "message": "Stock movement recorded successfully.",
-  "movement_id": 1,
-  "previous_quantity": 130,
-  "new_quantity": 150
+  "quantity_on_hand": 150,
+  "reorder_level": 25
 }
+```
 
-Status code: 201 Created
+## 7. Pagination and Filtering
 
-## 7. HTTP Status Codes
+The product and inventory list endpoints support pagination.
 
-- 200: Request successful.
-- 201: Resource created successfully.
-- 400: Invalid request or validation error.
-- 404: Resource not found.
-- 500: Internal server error.
+Available parameters:
 
-## 8. Error Handling and Logging
+- page: page number.
+- size: number of records per page.
+- category: filter products by category name.
+- name: search products by name.
+- store_id: filter inventory by store.
+- product_id: filter inventory by product.
 
-The application uses centralised Flask error handlers.
+Example:
 
-Errors are returned as JSON responses.
+`/api/products?page=1&size=10&category=Groceries`
 
-The Python logging module records application failures in stocksync.log.
+## 8. Validation
 
-Database transactions are rolled back when a database write fails.
+The API validates incoming JSON data.
 
-## 9. Configuration
+Examples include:
 
-Database credentials are stored in the .env file.
+- Required fields must be provided.
+- Product prices cannot be negative.
+- Product SKUs must be unique.
+- Category IDs must be valid.
+- Inventory quantities cannot be negative.
+- Pagination values must be within the permitted range.
 
-The config.py file provides development, testing and production configurations.
+Invalid requests return HTTP 400 with an explanatory JSON response.
 
-The .env file must not be uploaded to GitHub.
+## 9. HTTP Status Codes
 
-## 10. Running the Application
+| Status Code | Meaning |
+|---|---|
+| 200 | Successful request |
+| 201 | Resource created |
+| 400 | Invalid request |
+| 404 | Resource not found |
+| 500 | Internal server error |
 
-Activate the virtual environment.
+## 10. Error Handling and Logging
 
-Install dependencies:
+The application uses Flask error handlers to provide consistent JSON responses.
 
-pip install -r requirements.txt
+Python logging records application errors. Database write operations use transaction rollback when a failure occurs.
 
-Run the application:
+Detailed technical errors are not exposed to API users.
 
-python app.py
+## 11. Blueprint Organisation
+
+The application uses Flask Blueprints to organise its endpoints.
+
+- products_bp: product operations.
+- inventory_bp: inventory and stock movement operations.
+- reference_bp: store and category operations.
+
+## 12. Configuration
+
+Database settings are stored in an environment file.
+
+The application supports development, testing and production configurations.
+
+## 13. Running the Application
+
+Activate the Python virtual environment and install the dependencies.
+
+Run:
+
+```powershell
+python -m pip install -r requirements.txt
+python -m Backend.app
+```
 
 The API runs locally at:
 
