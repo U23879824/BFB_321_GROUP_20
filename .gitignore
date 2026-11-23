@@ -1,4 +1,29 @@
 
+# Private environment variables
+.env
+.env.*
+!.env.example
+
+# Python virtual environments
+.venv/
+venv/
+
+# Python cache files
+__pycache__/
+*.pyc
+
+# Local logs
+*.log
+logs/
+
+# Test and coverage cache
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Local editor and operating system files
+.DS_Store
+Thumbs.db
 .env
 __pycache__/
 
