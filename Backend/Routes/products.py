@@ -1,612 +1,233 @@
-from flask import Blueprint, jsonify, request
-from mysql.connector import Error, IntegrityError
+ 
+from flask import Blueprint, request, jsonify
 from decimal import Decimal, InvalidOperation
 import logging
+import pymysql
 
-from Backend.Database.db import get_db_connection
-from Backend.Routes.helpers import read_pagination, require_json_object
-
+from Backend.Models import products as product_model
 
 products_bp = Blueprint("products", __name__)
-
 logger = logging.getLogger(__name__)
 
 
 def validate_product(data, partial=False):
+    if not isinstance(data, dict):
+        return "Request body must be a JSON object."
 
-    allowed_fields = {
-        "product_name",
-        "sku",
-        "category_id",
-        "unit_price",
-        "description"
-    }
-
-    required_fields = {
-        "product_name",
-        "sku",
-        "category_id",
-        "unit_price"
-    }
-
-    if not data:
-
-        return "At least one product field is required."
-
-    if set(data) - allowed_fields:
-
-        return "Unknown product field supplied."
+    required = ["product_name", "sku", "category_id", "unit_price"]
 
     if not partial:
-
-        missing = required_fields - set(data)
-
-        if missing:
-
-            return "Missing required fields: " + ", ".join(missing)
+        for field in required:
+            if field not in data:
+                return f"{field} is required."
 
     if "product_name" in data:
-
-        if not isinstance(data["product_name"], str) or not data["product_name"].strip() or len(data["product_name"]) > 150:
-
-            return "Invalid product name."
+        if not isinstance(data["product_name"], str) or not data["product_name"].strip():
+            return "product_name must be a non-empty string."
 
     if "sku" in data:
-
-        if not isinstance(data["sku"], str) or not data["sku"].strip() or len(data["sku"]) > 50:
-
-            return "Invalid SKU."
+        if not isinstance(data["sku"], str) or not data["sku"].strip():
+            return "sku must be a non-empty string."
 
     if "category_id" in data:
-
-        if type(data["category_id"]) is not int or data["category_id"] < 1:
-
-            return "Category ID must be a positive whole number."
+        if type(data["category_id"]) is not int or data["category_id"] <= 0:
+            return "category_id must be a positive integer."
 
     if "unit_price" in data:
-
         try:
-
             price = Decimal(str(data["unit_price"]))
 
             if not price.is_finite() or price < 0:
+                return "unit_price must be a non-negative number."
 
-                return "Unit price must be a non-negative number."
+        except (InvalidOperation, ValueError):
+            return "unit_price must be a valid number."
 
-            if price.as_tuple().exponent < -2:
-
-                return "Unit price cannot have more than two decimal places."
-
-        except (InvalidOperation, ValueError, TypeError):
-
-            return "Unit price must be a valid number."
-
-    if "description" in data and data["description"] is not None:
-
-        if not isinstance(data["description"], str) or len(data["description"]) > 255:
-
-            return "Invalid description."
+    if "description" in data:
+        if data["description"] is not None and not isinstance(data["description"], str):
+            return "description must be a string."
 
     return None
 
 
-# 1. GET ALL PRODUCTS
+def handle_database_error(error):
+    code = error.args[0] if error.args else None
+
+    if code == 1062:
+        return jsonify({
+            "error": "A product with this SKU already exists."
+        }), 409
+
+    if code == 1452:
+        return jsonify({
+            "error": "The selected category does not exist."
+        }), 400
+
+    logger.exception("Product database error")
+    return jsonify({"error": "A database error occurred."}), 500
+
+
 @products_bp.route("/api/products", methods=["GET"])
-def get_products():
-
-    page, size, error_response = read_pagination()
-
-    if error_response:
-        return error_response
-
-    category = request.args.get("category")
-    name = request.args.get("name")
-
-    connection = None
-    cursor = None
-
+def list_products():
     try:
+        try:
+            page = int(request.args.get("page", "1"))
+            size = int(request.args.get("size", "10"))
+        except ValueError:
+            return jsonify({
+                "error": "page and size must be integers."
+            }), 400
 
-        connection = get_db_connection()
+        if page < 1 or size < 1 or size > 100:
+            return jsonify({
+                "error": "page must be at least 1 and size must be between 1 and 100."
+            }), 400
 
-        cursor = connection.cursor(dictionary=True)
+        category_id = request.args.get("category_id")
 
-        conditions = []
-        parameters = []
+        if category_id is not None:
+            try:
+                category_id = int(category_id)
+                if category_id <= 0:
+                    raise ValueError
+            except ValueError:
+                return jsonify({
+                    "error": "category_id must be a positive integer."
+                }), 400
 
-        if category:
+        name = request.args.get("name")
 
-            conditions.append("c.category_name = %s")
-            parameters.append(category.strip())
-
-        if name:
-
-            conditions.append("p.product_name LIKE %s")
-            parameters.append("%" + name.strip() + "%")
-
-        where = ""
-
-        if conditions:
-
-            where = " WHERE " + " AND ".join(conditions)
-
-        cursor.execute(
-            """
-            SELECT COUNT(*) AS total
-            FROM products p
-            JOIN categories c
-            ON p.category_id = c.category_id
-            """ + where,
-            tuple(parameters)
+        records, total = product_model.get_all_products(
+            page, size, category_id, name
         )
-
-        total = cursor.fetchone()["total"]
-
-        cursor.execute(
-            """
-            SELECT
-                p.product_id,
-                p.product_name,
-                p.sku,
-                p.category_id,
-                c.category_name,
-                p.unit_price,
-                p.description
-            FROM products p
-            JOIN categories c
-            ON p.category_id = c.category_id
-            """ + where + """
-            ORDER BY p.product_id
-            LIMIT %s OFFSET %s
-            """,
-            tuple(parameters + [size, (page - 1) * size])
-        )
-
-        products = cursor.fetchall()
 
         return jsonify({
-
-            "success": True,
-
-            "data": products,
-
+            "data": records,
             "pagination": {
-
                 "page": page,
-
                 "size": size,
-
-                "total_records": total,
-
-                "total_pages": (total + size - 1) // size
-
+                "total": total,
+                "pages": (total + size - 1) // size
             }
-
         }), 200
 
-    except Error:
-
-        logger.exception("Error retrieving products")
-
-        return jsonify({
-            "success": False,
-            "error": "Unable to retrieve products."
-        }), 500
-
-    finally:
-
-        if cursor:
-            cursor.close()
-
-        if connection and connection.is_connected():
-            connection.close()
+    except Exception:
+        logger.exception("Could not retrieve products")
+        return jsonify({"error": "Could not retrieve products."}), 500
 
 
-# 2. GET ONE PRODUCT
 @products_bp.route("/api/products/<int:product_id>", methods=["GET"])
 def get_product(product_id):
-
-    connection = None
-    cursor = None
-
     try:
-
-        connection = get_db_connection()
-
-        cursor = connection.cursor(dictionary=True)
-
-        cursor.execute(
-            """
-            SELECT *
-            FROM products
-            WHERE product_id = %s
-            """,
-            (product_id,)
-        )
-
-        product = cursor.fetchone()
+        product = product_model.get_product(product_id)
 
         if product is None:
+            return jsonify({"error": "Product not found."}), 404
 
-            return jsonify({
-                "success": False,
-                "error": "Product not found."
-            }), 404
+        return jsonify({"data": product}), 200
 
-        return jsonify({
-
-            "success": True,
-
-            "data": product
-
-        }), 200
-
-    except Error:
-
-        logger.exception("Error retrieving product")
-
-        return jsonify({
-            "success": False,
-            "error": "Unable to retrieve product."
-        }), 500
-
-    finally:
-
-        if cursor:
-            cursor.close()
-
-        if connection and connection.is_connected():
-            connection.close()
+    except Exception:
+        logger.exception("Could not retrieve product")
+        return jsonify({"error": "Could not retrieve product."}), 500
 
 
-# 3. CREATE PRODUCT
 @products_bp.route("/api/products", methods=["POST"])
-def create_product():
-
-    data, error_response = require_json_object()
-
-    if error_response:
-        return error_response
-
-    validation_error = validate_product(data)
-
-    if validation_error:
-
+def add_product():
+    if not request.is_json:
         return jsonify({
-            "success": False,
-            "error": validation_error
+            "error": "Content-Type must be application/json."
         }), 400
 
-    connection = None
-    cursor = None
+    data = request.get_json(silent=True)
+    error = validate_product(data)
+
+    if error:
+        return jsonify({"error": error}), 400
 
     try:
-
-        connection = get_db_connection()
-
-        cursor = connection.cursor()
-
-        cursor.execute(
-            """
-            INSERT INTO products
-            (
-                product_name,
-                sku,
-                category_id,
-                unit_price,
-                description
-            )
-            VALUES (%s, %s, %s, %s, %s)
-            """,
-            (
-                data["product_name"].strip(),
-                data["sku"].strip(),
-                data["category_id"],
-                str(Decimal(str(data["unit_price"]))),
-                data.get("description")
-            )
-        )
-
-        product_id = cursor.lastrowid
-
-        connection.commit()
+        product_id = product_model.create_product(data)
 
         return jsonify({
-
-            "success": True,
-
             "message": "Product created successfully.",
-
             "product_id": product_id
-
         }), 201
 
-    except IntegrityError as error:
+    except pymysql.MySQLError as error:
+        return handle_database_error(error)
 
-        if connection:
-            connection.rollback()
-
-        if error.errno == 1062:
-
-            return jsonify({
-                "success": False,
-                "error": "This SKU already exists."
-            }), 400
-
-        if error.errno == 1452:
-
-            return jsonify({
-                "success": False,
-                "error": "The selected category does not exist."
-            }), 400
-
-        logger.exception("Product creation integrity error")
-
-        return jsonify({
-            "success": False,
-            "error": "Unable to create product."
-        }), 500
-
-    except Error:
-
-        if connection:
-            connection.rollback()
-
-        logger.exception("Product creation failed")
-
-        return jsonify({
-            "success": False,
-            "error": "Unable to create product."
-        }), 500
-
-    finally:
-
-        if cursor:
-            cursor.close()
-
-        if connection and connection.is_connected():
-            connection.close()
+    except Exception:
+        logger.exception("Could not create product")
+        return jsonify({"error": "Could not create product."}), 500
 
 
-# 4. UPDATE COMPLETE PRODUCT USING PUT
 @products_bp.route("/api/products/<int:product_id>", methods=["PUT"])
-def update_product(product_id):
-
-    data, error_response = require_json_object()
-
-    if error_response:
-        return error_response
-
-    validation_error = validate_product(data)
-
-    if validation_error:
-
+def replace_product(product_id):
+    if not request.is_json:
         return jsonify({
-            "success": False,
-            "error": validation_error
+            "error": "Content-Type must be application/json."
         }), 400
 
-    connection = None
-    cursor = None
+    data = request.get_json(silent=True)
+    error = validate_product(data)
+
+    if error:
+        return jsonify({"error": error}), 400
 
     try:
+        existing = product_model.get_product(product_id)
 
-        connection = get_db_connection()
+        if existing is None:
+            return jsonify({"error": "Product not found."}), 404
 
-        cursor = connection.cursor()
-
-        cursor.execute(
-            """
-            UPDATE products
-            SET
-                product_name = %s,
-                sku = %s,
-                category_id = %s,
-                unit_price = %s,
-                description = %s
-            WHERE product_id = %s
-            """,
-            (
-                data["product_name"].strip(),
-                data["sku"].strip(),
-                data["category_id"],
-                str(Decimal(str(data["unit_price"]))),
-                data.get("description"),
-                product_id
-            )
-        )
-
-        if cursor.rowcount == 0:
-
-            cursor.execute(
-                "SELECT product_id FROM products WHERE product_id = %s",
-                (product_id,)
-            )
-
-            if cursor.fetchone() is None:
-
-                return jsonify({
-                    "success": False,
-                    "error": "Product not found."
-                }), 404
-
-        connection.commit()
+        product_model.update_product(product_id, data)
 
         return jsonify({
-
-            "success": True,
-
             "message": "Product updated successfully.",
-
             "product_id": product_id
-
         }), 200
 
-    except IntegrityError as error:
+    except pymysql.MySQLError as error:
+        return handle_database_error(error)
 
-        if connection:
-            connection.rollback()
-
-        if error.errno == 1062:
-
-            return jsonify({
-                "success": False,
-                "error": "This SKU already exists."
-            }), 400
-
-        if error.errno == 1452:
-
-            return jsonify({
-                "success": False,
-                "error": "The selected category does not exist."
-            }), 400
-
-        logger.exception("Product update integrity error")
-
-        return jsonify({
-            "success": False,
-            "error": "Unable to update product."
-        }), 500
-
-    except Error:
-
-        if connection:
-            connection.rollback()
-
-        logger.exception("Product update failed")
-
-        return jsonify({
-            "success": False,
-            "error": "Unable to update product."
-        }), 500
-
-    finally:
-
-        if cursor:
-            cursor.close()
-
-        if connection and connection.is_connected():
-            connection.close()
+    except Exception:
+        logger.exception("Could not update product")
+        return jsonify({"error": "Could not update product."}), 500
 
 
-# 5. PARTIAL PRODUCT UPDATE USING PATCH
 @products_bp.route("/api/products/<int:product_id>", methods=["PATCH"])
 def patch_product(product_id):
-
-    data, error_response = require_json_object()
-
-    if error_response:
-        return error_response
-
-    validation_error = validate_product(data, partial=True)
-
-    if validation_error:
-
+    if not request.is_json:
         return jsonify({
-            "success": False,
-            "error": validation_error
+            "error": "Content-Type must be application/json."
         }), 400
 
-    connection = None
-    cursor = None
+    data = request.get_json(silent=True)
+    error = validate_product(data, partial=True)
+
+    if error:
+        return jsonify({"error": error}), 400
+
+    if not data:
+        return jsonify({
+            "error": "At least one field must be provided."
+        }), 400
 
     try:
+        existing = product_model.get_product(product_id)
 
-        connection = get_db_connection()
+        if existing is None:
+            return jsonify({"error": "Product not found."}), 404
 
-        cursor = connection.cursor()
-
-        allowed_fields = [
-            "product_name",
-            "sku",
-            "category_id",
-            "unit_price",
-            "description"
-        ]
-
-        updates = []
-        values = []
-
-        for field in allowed_fields:
-
-            if field in data:
-
-                updates.append(f"{field} = %s")
-
-                value = data[field]
-
-                if field in ("product_name", "sku"):
-                    value = value.strip()
-
-                if field == "unit_price":
-                    value = str(Decimal(str(value)))
-
-                values.append(value)
-
-        values.append(product_id)
-
-        cursor.execute(
-            "UPDATE products SET " + ", ".join(updates)
-            + " WHERE product_id = %s",
-            tuple(values)
-        )
-
-        if cursor.rowcount == 0:
-
-            cursor.execute(
-                "SELECT product_id FROM products WHERE product_id = %s",
-                (product_id,)
-            )
-
-            if cursor.fetchone() is None:
-
-                return jsonify({
-                    "success": False,
-                    "error": "Product not found."
-                }), 404
-
-        connection.commit()
+        product_model.update_product(product_id, data)
 
         return jsonify({
-            "success": True,
-            "message": "Product partially updated successfully."
+            "message": "Product updated successfully.",
+            "product_id": product_id
         }), 200
 
-    except IntegrityError as error:
+    except pymysql.MySQLError as error:
+        return handle_database_error(error)
 
-        if connection:
-            connection.rollback()
-
-        if error.errno == 1062:
-
-            return jsonify({
-                "success": False,
-                "error": "This SKU already exists."
-            }), 400
-
-        logger.exception("Product patch integrity error")
-
-        return jsonify({
-            "success": False,
-            "error": "Unable to update product."
-        }), 500
-
-    except Error:
-
-        if connection:
-            connection.rollback()
-
-        logger.exception("Product patch failed")
-
-        return jsonify({
-            "success": False,
-            "error": "Unable to update product."
-        }), 500
-
-    finally:
-
-        if cursor:
-            cursor.close()
-
-        if connection and connection.is_connected():
-            connection.close()
+    except Exception:
+        logger.exception("Could not update product")
+        return jsonify({"error": "Could not update product."}), 500

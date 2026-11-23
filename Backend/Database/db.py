@@ -1,30 +1,33 @@
-import mysql.connector
-import os
+ 
+import pymysql
+from flask import current_app, g
 
-from Backend.config import configurations
 
-
-def get_db_connection():
-
-    environment = os.getenv("FLASK_ENV", "development")
-
-    config_class = configurations.get(
-        environment,
-        configurations["development"]
+def connect():
+    return pymysql.connect(
+        host=current_app.config["DB_HOST"],
+        port=current_app.config["DB_PORT"],
+        user=current_app.config["DB_USER"],
+        password=current_app.config["DB_PASSWORD"],
+        database=current_app.config["DB_NAME"],
+        cursorclass=pymysql.cursors.DictCursor,
+        autocommit=False
     )
 
-    connection = mysql.connector.connect(
 
-        host=config_class.MYSQL_HOST,
+def get_db():
+    if "db" not in g:
+        g.db = connect()
 
-        port=config_class.MYSQL_PORT,
+    return g.db
 
-        user=config_class.MYSQL_USER,
 
-        password=config_class.MYSQL_PASSWORD,
+def close_db(error=None):
+    db = g.pop("db", None)
 
-        database=config_class.MYSQL_DATABASE
+    if db is not None:
+        db.close()
 
-    )
 
-    return connection
+def init_app(app):
+    app.teardown_appcontext(close_db)
