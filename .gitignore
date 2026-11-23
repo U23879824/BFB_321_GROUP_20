@@ -1,32 +1,5 @@
-# Environment variables and private settings
-.env
-.env.*
-!.env.example
-
-# Python virtual environments
-.venv/
 venv/
-env/
-
-# Python cache files
+.env
 __pycache__/
-*.py[cod]
-*$py.class
-
-# Log files
-*.log
-logs/
-
-# Testing and coverage files
-.pytest_cache/
-.coverage
-htmlcov/
-
-# IDE and editor settings
-.vscode/
-
-# Operating system files
-.DS_Store
-Thumbs.db
-desktop.ini
-
+*.pyc
+Backend/stocksync.log
