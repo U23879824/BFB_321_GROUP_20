@@ -15,6 +15,17 @@ def validate_product(data, partial=False):
         return "Request body must be a JSON object."
 
     required = ["product_name", "sku", "category_id", "unit_price"]
+    allowed_fields = [
+        "product_name",
+        "sku",
+        "category_id",
+        "unit_price",
+        "description"
+    ]
+
+    for field in data:
+        if field not in allowed_fields:
+            return f"Invalid field: {field}"
 
     if not partial:
         for field in required:
