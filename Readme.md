@@ -224,3 +224,167 @@ Run the Flask application from the main project directory:
 The API will be available at:
 
     http://127.0.0.1:5000/
+
+
+## Installation, Database Setup and Running StockSync
+## 1. Project Purpose
+
+StockSync is a retail inventory management system designed to help manage products, stock levels and stock movements across multiple store locations. It uses a centralised database to maintain inventory information and provides API endpoints for retrieving and updating product and stock records.
+
+## 2. Database Schema and ERD
+
+StockSync uses a MySQL relational database named stocksync_db. The database consists of five main tables:
+
+stores: Stores information about individual retail branches.
+
+categories: Stores product categories.
+
+products: Stores product details, including names, SKUs and prices.
+
+inventory: Connects products to individual stores and records stock quantities and reorder levels.
+
+stock_movements: Records stock movements, including stock received, stock issued and adjustments.
+
+The tables are connected through primary keys and foreign keys to maintain relationships and data consistency.
+
+The Entity Relationship Diagram (ERD) below illustrates the database structure and relationships between the five tables.
+
+
+
+## 3. System Requirements
+
+Before installing StockSync, ensure that the following software is available:
+
+Python 3
+
+MySQL Server
+
+MySQL Workbench
+
+Git
+
+Visual Studio Code or another code editor
+
+## 4. Clone the Repository
+
+Open PowerShell or the VS Code terminal and execute:
+
+git clone https://github.com/U23879824/BFB_321_GROUP_20.git
+
+Navigate into the project directory:
+
+cd BFB_321_GROUP_20
+
+## 5. Create and Activate the Python Environment
+
+Create a virtual environment:
+
+python -m venv .venv
+
+Activate it in Windows PowerShell:
+
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+.\.venv\Scripts\Activate.ps1
+
+Once activated, (.venv) should appear at the beginning of the terminal prompt.
+
+## 6. Install Project Dependencies
+
+Install the required Python packages:
+
+pip install -r requirements.txt
+
+The requirements file includes Flask, MySQL Connector and python-dotenv.
+
+## 7. Configure Environment Variables
+
+Create a local environment file by copying the example:
+
+Copy-Item .env.example .env
+
+Open the .env file and configure the database connection settings:
+
+FLASK_ENV=development
+SECRET_KEY=your-local-secret-key
+DB_HOST=localhost
+DB_PORT=3306
+DB_NAME=stocksync_db
+DB_USER=root
+DB_PASSWORD=your-mysql-password
+TEST_DB_NAME=stocksync_test_db
+
+Replace your-mysql-password with the password for your local MySQL account. If the account does not use a password, leave the value blank.
+
+The .env file contains local configuration and should not be uploaded to GitHub.
+
+## 8. Create and Populate the Database
+
+Open MySQL Workbench and connect to your local MySQL Server.
+
+Step 1: Create the main database
+
+Open database/schema.sql from the project folder.
+
+Open the SQL script in MySQL Workbench.
+
+Execute the script to create stocksync_db and its five tables.
+
+Step 2: Load sample data
+
+Open database/seed.sql in MySQL Workbench.
+
+Execute the script to insert the sample stores, categories, products, inventory records and stock movements.
+
+Step 3: Create the test database (optional)
+
+To create the separate test database, open and execute:
+
+database/schema_test.sql
+
+This creates stocksync_test_db with the required table structure.
+
+After executing the scripts, check the SCHEMAS panel in MySQL Workbench to confirm that the databases and tables have been created.
+
+## 9. Run the Application
+
+Ensure that:
+
+The virtual environment is activated.
+
+MySQL Server is running.
+
+The .env file contains the correct database connection settings.
+
+The main database has been created and populated.
+
+Start the Flask application using:
+
+python app.py
+
+When the application starts successfully, the local development server should be available at:
+
+http://127.0.0.1:5000
+
+The root endpoint can be accessed through a web browser to check the API welcome response.
+
+## 10. Testing and Login Information
+
+The project includes a calculation test file named test_calculations.py. It can be run using:
+
+python -m unittest test_calculations.py
+
+StockSync currently provides REST API functionality for product and inventory management. No sign-in credentials are specified because a user authentication and login system has not been established in the supplied implementation.
+
+## 11. Troubleshooting
+
+MySQL connection error: Confirm that MySQL Server is running and that the database credentials in .env are correct.
+
+Module not found: Activate the virtual environment and run pip install -r requirements.txt.
+
+Database not found: Execute database/schema.sql in MySQL Workbench.
+
+Missing sample records: Execute database/seed.sql after creating the main database.
+
+Application does not start: Check the terminal output for Python errors and confirm that the application files are up to date.
+
+Following these instructions allows a new developer to configure the environment, create the database, load sample data and start the StockSync application.
