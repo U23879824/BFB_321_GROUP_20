@@ -109,10 +109,10 @@
                     <small>May affect online orders</small>
                 </article>
                 <article class="kpi-card">
-                    <div class="kpi-icon purple">↩</div>
-                    <p>Customer returns</p>
-                    <h2 id="customerReturnsKPI">12</h2>
-                    <small>Illustrative return count</small>
+                    <div class="kpi-icon purple">🏪</div>
+                    <p>Total stores</p>
+                    <h2 id="totalStoresKPI">--</h2>
+                    <small>Stores with inventory records</small>
                 </article>
             </section>
 
@@ -123,18 +123,18 @@
                 <article class="panel" id="safety-stock">
                     <div class="panel-heading">
                         <div>
-                            <h3>Stock Level vs Safety Stock</h3>
-                            <p>Compare available units with the safety-stock target (Hatfield).</p>
+                            <h3>Stock Level vs Reorder Level</h3>
+                            <p>Compare available units with the reorder level (Hatfield).</p>
                         </div>
                         <span class="panel-icon">▥</span>
                     </div>
 
                     <div class="legend">
                         <span><i class="dot blue-dot"></i> Current stock</span>
-                        <span><i class="dot orange-dot"></i> Safety stock</span>
+                        <span><i class="dot orange-dot"></i> Reorder level</span>
                     </div>
 
-                    <div class="bar-chart">
+                    <div class="bar-chart" id="liveStockChart">
                         <div class="chart-row">
                             <span class="product-label">Milk 2L</span>
                             <div class="bars">
@@ -194,20 +194,34 @@
                     </div>
 
                     <div class="pie-wrapper">
-                        <div class="pie-chart" role="img"
-                             aria-label="Pie chart: 60% in stock, 28% low stock, 12% out of stock">
-                            <div class="pie-centre">
-                                <strong>50</strong>
-                                <small>Products</small>
-                            </div>
+                    <div class="pie-chart" id="livePieChart" role="img"
+                        aria-label="Inventory status chart">
+                        <div class="pie-centre">
+                            <strong id="pieTotal">0</strong>
+                            <small>Records</small>
                         </div>
                     </div>
+                </div>
 
-                    <div class="pie-legend">
-                        <div><i class="dot green-dot"></i><span>In stock</span><strong>60% · 30</strong></div>
-                        <div><i class="dot orange-dot"></i><span>Low stock</span><strong>28% · 14</strong></div>
-                        <div><i class="dot red-dot"></i><span>Out of stock</span><strong>12% · 6</strong></div>
+                <div class="pie-legend">
+                    <div>
+                        <i class="dot green-dot"></i>
+                        <span>In stock</span>
+                        <strong id="pieInStock">0% · 0</strong>
                     </div>
+
+                    <div>
+                        <i class="dot orange-dot"></i>
+                        <span>Low stock</span>
+                        <strong id="pieLowStock">0% · 0</strong>
+                    </div>
+
+                    <div>
+                        <i class="dot red-dot"></i>
+                        <span>Out of stock</span>
+                        <strong id="pieOutOfStock">0% · 0</strong>
+                    </div>
+                </div>
                 </article>
 
                 <!-- EOQ -->
@@ -270,29 +284,58 @@
                     <div class="panel-heading">
                         <div>
                             <h3>Reports &amp; Key Performance Indicators</h3>
-                            <p>Simple visual summary of sample retail performance.</p>
+                            <p>Live inventory performance across all stores.</p>
                         </div>
                         <span class="panel-icon">▧</span>
                     </div>
 
                     <div class="kpi-report">
-                        <div class="report-item">
-                            <div class="report-label"><span>Stock availability</span><strong>94%</strong></div>
-                            <div class="progress-track"><div class="progress-fill green-fill" style="width:94%"></div></div>
-                        </div>
-                        <div class="report-item">
-                            <div class="report-label"><span>Online order fulfilment</span><strong>87%</strong></div>
-                            <div class="progress-track"><div class="progress-fill blue-fill" style="width:87%"></div></div>
-                        </div>
-                        <div class="report-item">
-                            <div class="report-label"><span>Stock discrepancy rate</span><strong>8%</strong></div>
-                            <div class="progress-track"><div class="progress-fill red-fill" style="width:8%"></div></div>
-                        </div>
-                        <div class="report-item">
-                            <div class="report-label"><span>Returns inspected</span><strong>75%</strong></div>
-                            <div class="progress-track"><div class="progress-fill orange-fill" style="width:75%"></div></div>
-                        </div>
+
+    <div class="report-item">
+        <div class="report-label">
+            <span>Stock availability</span>
+            <strong id="reportAvailability">--</strong>
+        </div>
+        <div class="progress-track">
+            <div class="progress-fill green-fill"
+                 id="availabilityBar" style="width:0%"></div>
+        </div>
+    </div>
+
+    <div class="report-item">
+        <div class="report-label">
+            <span>Healthy stock rate</span>
+            <strong id="reportHealthy">--</strong>
+        </div>
+        <div class="progress-track">
+            <div class="progress-fill blue-fill"
+                 id="healthyBar" style="width:0%"></div>
+        </div>
+    </div>
+
+    <div class="report-item">
+        <div class="report-label">
+            <span>Out-of-stock rate</span>
+            <strong id="reportOutOfStock">--</strong>
+        </div>
+        <div class="progress-track">
+            <div class="progress-fill red-fill"
+                 id="outOfStockBar" style="width:0%"></div>
+        </div>
+    </div>
+
+                <div class="report-item">
+                    <div class="report-label">
+                        <span>Low-stock rate</span>
+                        <strong id="reportLowStock">--</strong>
                     </div>
+                    <div class="progress-track">
+                        <div class="progress-fill orange-fill"
+                            id="lowStockBar" style="width:0%"></div>
+                    </div>
+                </div>
+
+            </div>
 
                 </article>
             </section>
@@ -419,6 +462,8 @@
                                 <th class="num">Hatfield</th>
                                 <th class="num">Hillcrest Blvd</th>
                                 <th class="num">Menlyn Maine</th>
+                                <th class="num">The Grove</th>
+                                <th class="num">Equestria</th>
                                 <th>Status (Hatfield)</th>
                             </tr>
                         </thead>
@@ -575,19 +620,23 @@
 <script>
     // ---- Live product search ----
     const search = document.getElementById('productSearch');
-    const rows = document.querySelectorAll('#inventoryTable tbody tr');
-    const count = document.getElementById('rowCount');
+const count = document.getElementById('rowCount');
 
-    function filterRows() {
-        const q = search.value.trim().toLowerCase();
-        let shown = 0;
-        rows.forEach(r => {
-            const match = r.textContent.toLowerCase().includes(q);
-            r.style.display = match ? '' : 'none';
-            if (match) shown++;
-        });
-        count.textContent = `Showing ${shown} of ${rows.length} products`;
-    }
+function filterRows() {
+    const rows = document.querySelectorAll('#inventoryTable tbody tr');
+    const q = search.value.trim().toLowerCase();
+
+    let shown = 0;
+
+    rows.forEach(r => {
+        const match = r.textContent.toLowerCase().includes(q);
+        r.style.display = match ? '' : 'none';
+
+        if (match) shown++;
+    });
+
+    count.textContent = `Showing ${shown} of ${rows.length} products`;
+}
     search.addEventListener('input', filterRows);
     filterRows();
 
@@ -821,38 +870,110 @@ document.getElementById("updateStockForm")
 
 <!-- B3.1 Flow 2: Temporary availability data -->
 <script>
-const demoAvailability = {
-    "Milk 2L": {
-        "Hatfield": 20,
-        "Hillcrest Blvd": 35,
-        "Menlyn Maine": 12
-    },
-    "Bread 700g": {
-        "Hatfield": 15,
-        "Hillcrest Blvd": 25,
-        "Menlyn Maine": 8
-    },
-    "Eggs 18-pack": {
-        "Hatfield": 10,
-        "Hillcrest Blvd": 18,
-        "Menlyn Maine": 5
-    },
-    "Tomatoes 1kg": {
-        "Hatfield": 30,
-        "Hillcrest Blvd": 20,
-        "Menlyn Maine": 15
-    },
-    "Chicken 1kg": {
-        "Hatfield": 12,
-        "Hillcrest Blvd": 16,
-        "Menlyn Maine": 7
+    const API_BASE = "http://127.0.0.1:5001/api";
+
+    async function testAPIConnection() {
+        try {
+             const response = await fetch(
+                  `${API_BASE}/inventory?page=1&size=100`
+             );
+
+             if (!response.ok) {
+                 throw new Error(`HTTP error: ${response.status}`);
+            }
+
+            const result = await response.json();
+
+            console.log("API connection successful!");
+            console.log("Inventory records:", result.data);
+            console.log("Total records:", result.pagination.total);
+
+   
+        } catch (error) {
+        console.error("API connection failed:", error);
+   
     }
-};
+}
+
+testAPIConnection();
+
+async function loadDropdowns() {
+    try {
+        const [productResponse, storeResponse] =
+            await Promise.all([
+                fetch(`${API_BASE}/products?page=1&size=100`),
+                fetch(`${API_BASE}/stores`)
+            ]);
+
+        if (!productResponse.ok || !storeResponse.ok) {
+            throw new Error("Could not retrieve products or stores.");
+        }
+
+        const productResult = await productResponse.json();
+        const storeResult = await storeResponse.json();
+
+        const products = productResult.data;
+        const stores = storeResult.data;
+
+        // Populate product dropdowns
+        const productDropdowns = [
+            "stockProduct",
+            "availabilityProduct",
+            "orderProduct"
+        ];
+
+        productDropdowns.forEach(id => {
+            const select = document.getElementById(id);
+
+            select.innerHTML =
+                '<option value="">Select product</option>';
+
+            products.forEach(product => {
+                const option = document.createElement("option");
+
+                option.value = product.product_id;
+                option.textContent = product.product_name;
+
+                select.appendChild(option);
+            });
+        });
+
+        // Populate store dropdowns
+        const storeDropdowns = [
+            "stockStore",
+            "orderStore"
+        ];
+
+        storeDropdowns.forEach(id => {
+            const select = document.getElementById(id);
+
+            select.innerHTML =
+                '<option value="">Select store</option>';
+
+            stores.forEach(store => {
+                const option = document.createElement("option");
+
+                option.value = store.store_id;
+                option.textContent = store.store_name;
+
+                select.appendChild(option);
+            });
+        });
+
+        console.log("Dropdowns loaded successfully!");
+
+    } catch (error) {
+        console.error("Dropdown loading failed:", error);
+    }
+}
+
+loadDropdowns();
+
 
 document.getElementById("checkAvailabilityBtn")
-    .addEventListener("click", function() {
+    .addEventListener("click", async function() {
 
-    const product = document.getElementById(
+    const productId = document.getElementById(
         "availabilityProduct"
     ).value;
 
@@ -862,160 +983,534 @@ document.getElementById("checkAvailabilityBtn")
 
     results.replaceChildren();
 
-    if (!product) {
+    if (!productId) {
         results.textContent = "Please select a product.";
         return;
     }
 
-    const stock = demoAvailability[product];
+    results.textContent = "Checking availability...";
 
-    Object.entries(stock).forEach(([store, quantity]) => {
-        const row = document.createElement("div");
-        row.className = "availability-result";
+    try {
+        const response = await fetch(
+            `${API_BASE}/inventory?product_id=${productId}&size=100`
+        );
 
-        const status = quantity > 0
-            ? "In Stock"
-            : "Out of Stock";
+        const result = await response.json();
 
-        row.textContent =
-            `${store}: ${quantity} units — ${status}`;
+        if (!response.ok) {
+            throw new Error(
+                result.error || "Could not retrieve availability."
+            );
+        }
 
-        results.appendChild(row);
-    });
+        results.replaceChildren();
+
+        if (result.data.length === 0) {
+            results.textContent = "No inventory records found.";
+            return;
+        }
+
+        result.data.forEach(item => {
+            const row = document.createElement("div");
+            row.className = "availability-result";
+
+            let status;
+
+            if (item.quantity_on_hand === 0) {
+                status = "Out of Stock";
+            } else if (
+                item.quantity_on_hand <= item.reorder_level
+            ) {
+                status = "Low Stock";
+            } else {
+                status = "In Stock";
+            }
+
+            row.textContent =
+                `${item.store_name}: ` +
+                `${item.quantity_on_hand} units — ${status}`;
+
+            results.appendChild(row);
+        });
+
+    } catch (error) {
+        results.textContent = "Error: " + error.message;
+        console.error(error);
+    }
 });
 </script>
 
 
-<!-- B3.1 Flow 3: Temporary order processing -->
+<!-- B3.1 Flow 3: Live customer order processing -->
 <script>
 document.getElementById("placeOrderForm")
-    .addEventListener("submit", function(event) {
+    .addEventListener("submit", async function(event) {
 
     event.preventDefault();
 
-    const product = document.getElementById("orderProduct").value;
-    const store = document.getElementById("orderStore").value;
+    const productId = document.getElementById("orderProduct").value;
+    const storeId = document.getElementById("orderStore").value;
     const quantity = Number(
         document.getElementById("orderQuantity").value
     );
 
     const message = document.getElementById("orderMessage");
+    const button = document.getElementById("placeOrderBtn");
 
-    if (!product || !store ||
+    if (!productId || !storeId ||
         !Number.isInteger(quantity) || quantity <= 0) {
+
         message.textContent = "Please enter valid order details.";
+        message.style.color = "red";
         return;
     }
 
-    const availableStock = demoAvailability[product]?.[store];
+    message.textContent = "Processing order...";
+    message.style.color = "";
+    button.disabled = true;
 
-    if (availableStock === undefined) {
-        message.textContent = "Product or store not found.";
-        return;
-    }
+    try {
+        // Retrieve the selected inventory record
+        const response = await fetch(
+            `${API_BASE}/inventory?product_id=${productId}&store_id=${storeId}`
+        );
 
-    if (availableStock < quantity) {
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.error || "Inventory lookup failed.");
+        }
+
+        if (result.data.length === 0) {
+            throw new Error("Inventory record not found.");
+        }
+
+        const inventory = result.data[0];
+
+        // Check available stock
+        if (quantity > inventory.quantity_on_hand) {
+            throw new Error(
+                `Insufficient stock. Only ${inventory.quantity_on_hand} units available.`
+            );
+        }
+
+        // Record outgoing stock movement
+        const orderResponse = await fetch(
+            `${API_BASE}/stock-movements`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    inventory_id: inventory.inventory_id,
+                    movement_type: "OUT",
+                    quantity: quantity,
+                    notes: "Customer order"
+                })
+            }
+        );
+
+        const orderResult = await orderResponse.json();
+
+        if (!orderResponse.ok) {
+            throw new Error(
+                orderResult.error || "Order processing failed."
+            );
+        }
+
         message.textContent =
-            `Insufficient stock. Only ${availableStock} units available.`;
-        return;
-    }
+            `Order successful! ${quantity} units of ` +
+            `${inventory.product_name} allocated from ` +
+            `${inventory.store_name}. Saved to database.`;
 
-    // Temporary demonstration: reduce stock in browser memory
-    demoAvailability[product][store] -= quantity;
-    updateInventoryTable();
-    updateInventoryKPIs();
+        message.style.color = "green";
 
-    message.textContent =
-        `Demo order successful! ${quantity} units of ${product} ` +
-        `allocated from ${store}. Remaining stock: ` +
-        `${demoAvailability[product][store]}. ` +
-        `Not saved to the database.`;
+        await updateInventoryTable();
+        await updateInventoryKPIs();
 
-    // Refresh Flow 2 results if this product is selected
-    if (document.getElementById("availabilityProduct").value === product) {
-        document.getElementById("checkAvailabilityBtn").click();
+        // Refresh availability results
+        if (document.getElementById("availabilityProduct").value === productId) {
+            document.getElementById("checkAvailabilityBtn").click();
+        }
+
+    } catch (error) {
+        message.textContent = "Error: " + error.message;
+        message.style.color = "red";
+        console.error(error);
+
+    } finally {
+        button.disabled = false;
     }
 });
 </script>
 
 <script>
 
-function updateInventoryTable() {
-    const rows = document.querySelectorAll(
-        "#inventoryTable tbody tr"
+async function updateInventoryTable() {
+    const tbody = document.querySelector("#inventoryTable tbody");
+
+    try {
+        const [inventoryResponse, productResponse] =
+            await Promise.all([
+                fetch(`${API_BASE}/inventory?page=1&size=100`),
+                fetch(`${API_BASE}/products?page=1&size=100`)
+            ]);
+
+        if (!inventoryResponse.ok || !productResponse.ok) {
+            throw new Error("Could not load inventory.");
+        }
+
+        const inventoryResult = await inventoryResponse.json();
+        const productResult = await productResponse.json();
+
+        const inventory = inventoryResult.data;
+        const products = productResult.data;
+
+        tbody.replaceChildren();
+
+        products.forEach(product => {
+
+            const hatfield = inventory.find(item =>
+                item.product_id === product.product_id &&
+                item.store_id === 4
+            );
+
+            const hillcrest = inventory.find(item =>
+                item.product_id === product.product_id &&
+                item.store_id === 7
+            );
+
+            const menlyn = inventory.find(item =>
+                item.product_id === product.product_id &&
+                item.store_id === 5
+            );
+            const grove = inventory.find(item =>
+                item.product_id === product.product_id &&
+                item.store_id === 6
+            );
+
+            const equestria = inventory.find(item =>
+                item.product_id === product.product_id &&
+                item.store_id === 8
+            );
+
+            const row = document.createElement("tr");
+
+            const values = [
+                product.product_name,
+                product.category_name,
+                hatfield?.quantity_on_hand ?? "N/A",
+                hillcrest?.quantity_on_hand ?? "N/A",
+                menlyn?.quantity_on_hand ?? "N/A",
+                grove?.quantity_on_hand ?? "N/A",
+                equestria?.quantity_on_hand ?? "N/A"
+            ];
+
+            values.forEach((value, index) => {
+                const cell = document.createElement("td");
+                cell.textContent = value;
+
+                if (index >= 2 && value === 0) {
+                    cell.classList.add("zero");
+                }
+
+                row.appendChild(cell);
+            });
+
+            const statusCell = document.createElement("td");
+            const status = document.createElement("span");
+
+            if (!hatfield) {
+                status.textContent = "Unavailable";
+                status.className = "status-low";
+
+            } else if (hatfield.quantity_on_hand === 0) {
+                status.textContent = "Out of stock";
+                status.className = "status-low";
+
+            } else if (
+                hatfield.quantity_on_hand <= hatfield.reorder_level
+            ) {
+                status.textContent = "Low stock";
+                status.className = "status-low";
+
+            } else {
+                status.textContent = "In stock";
+                status.className = "status-good";
+            }
+
+            statusCell.appendChild(status);
+            row.appendChild(statusCell);
+            tbody.appendChild(row);
+        });
+
+        filterRows();
+
+        console.log("Live inventory table updated!");
+
+    } catch (error) {
+        console.error("Inventory table error:", error);
+        tbody.textContent = "Could not load inventory.";
+    }
+}
+
+function updateStockChart(inventory) {
+
+    const chart = document.getElementById("liveStockChart");
+
+    // Retrieve Hatfield inventory
+    const hatfieldStock = inventory.filter(
+        item => item.store_id === 4
     );
 
-    rows.forEach(row => {
-        const cells = row.querySelectorAll("td");
-        const product = cells[0].textContent.trim();
+    chart.replaceChildren();
 
-        if (!demoAvailability[product]) return;
+    // Use a common scale for all bars
+    const maxStock = Math.max(
+        1,
+        ...hatfieldStock.map(item =>
+            Math.max(
+                item.quantity_on_hand,
+                item.reorder_level
+            )
+        )
+    );
 
-        const stock = demoAvailability[product];
+    hatfieldStock.forEach(item => {
 
-        cells[2].textContent = stock["Hatfield"];
-        cells[3].textContent = stock["Hillcrest Blvd"];
-        cells[4].textContent = stock["Menlyn Maine"];
+        const quantity = item.quantity_on_hand;
+        const reorder = item.reorder_level;
 
-        // Update the Hatfield stock status
-        const hatfieldStock = stock["Hatfield"];
-        const status = cells[5];
+        const row = document.createElement("div");
+        row.className = "chart-row";
 
-        if (hatfieldStock === 0) {
-            status.innerHTML =
-                '<span class="status-low">Out of stock</span>';
-        } else if (hatfieldStock <= 12) {
-            status.innerHTML =
-                '<span class="status-low">Low stock</span>';
-        } else {
-            status.innerHTML =
-                '<span class="status-good">In stock</span>';
-        }
+        const label = document.createElement("span");
+        label.className = "product-label";
+        label.textContent = item.product_name;
 
-        // Highlight zero stock
-        [2, 3, 4].forEach(index => {
-            cells[index].classList.toggle(
-                "zero",
-                Number(cells[index].textContent) === 0
-            );
-        });
+        const bars = document.createElement("div");
+        bars.className = "bars";
+
+        const blueBar = document.createElement("div");
+        blueBar.className = "bar blue-bar";
+        blueBar.style.width =
+            `${quantity / maxStock * 100}%`;
+
+        const orangeBar = document.createElement("div");
+        orangeBar.className = "bar orange-bar";
+        orangeBar.style.width =
+            `${reorder / maxStock * 100}%`;
+
+        bars.append(blueBar, orangeBar);
+
+        const value = document.createElement("span");
+
+        value.className = quantity > reorder
+            ? "chart-value ok"
+            : "chart-value warn";
+
+        value.textContent = `${quantity} / ${reorder}`;
+
+        row.append(label, bars, value);
+        chart.appendChild(row);
     });
 }
-function updateInventoryKPIs() {
-    let totalStock = 0;
-    let availableProducts = 0;
-    let lowStockProducts = 0;
-    let outOfStockProducts = 0;
 
-    Object.values(demoAvailability).forEach(stores => {
-        const quantities = Object.values(stores).map(Number);
+function updateInventoryPieChart(inventory) {
 
-        totalStock += quantities.reduce((sum, qty) => sum + qty, 0);
+    const total = inventory.length;
 
-        if (quantities.some(qty => qty > 0)) {
-            availableProducts++;
-        }
+    let inStock = 0;
+    let lowStock = 0;
+    let outOfStock = 0;
 
-        if (quantities.some(qty => qty > 0 && qty <= 12)) {
-            lowStockProducts++;
-        }
+    inventory.forEach(item => {
 
-        if (quantities.every(qty => qty === 0)) {
-            outOfStockProducts++;
+        const quantity = Number(item.quantity_on_hand);
+        const reorder = Number(item.reorder_level);
+
+        if (quantity === 0) {
+            outOfStock++;
+        } else if (quantity <= reorder) {
+            lowStock++;
+        } else {
+            inStock++;
         }
     });
 
-    document.getElementById("totalStockKPI").textContent =
-        totalStock.toLocaleString();
+    const inPercent = total ? inStock / total * 100 : 0;
+    const lowPercent = total ? lowStock / total * 100 : 0;
+    const outPercent = total ? outOfStock / total * 100 : 0;
 
-    document.getElementById("availableProductsKPI").textContent =
-        availableProducts;
+    document.getElementById("pieTotal").textContent =
+        total;
 
-    document.getElementById("lowStockKPI").textContent =
-        lowStockProducts;
+    document.getElementById("pieInStock").textContent =
+        `${inPercent.toFixed(1)}% · ${inStock}`;
+
+    document.getElementById("pieLowStock").textContent =
+        `${lowPercent.toFixed(1)}% · ${lowStock}`;
+
+    document.getElementById("pieOutOfStock").textContent =
+        `${outPercent.toFixed(1)}% · ${outOfStock}`;
+
+    const chart = document.getElementById("livePieChart");
+
+    chart.style.background = total
+        ? `conic-gradient(
+            #22c55e 0% ${inPercent}%,
+            #f59e0b ${inPercent}% ${inPercent + lowPercent}%,
+            #ef4444 ${inPercent + lowPercent}% 100%
+        )`
+        : "#e5e7eb";
+
+    chart.setAttribute(
+        "aria-label",
+        `Inventory status: ${inStock} in stock,
+        ${lowStock} low stock,
+        ${outOfStock} out of stock`
+    );
+}
+
+function updateReportsKPIs(inventory) {
+
+    const total = inventory.length;
+
+    const available = inventory.filter(
+        item => Number(item.quantity_on_hand) > 0
+    ).length;
+
+    const healthy = inventory.filter(
+        item => Number(item.quantity_on_hand) >
+                Number(item.reorder_level)
+    ).length;
+
+    const outOfStock = inventory.filter(
+        item => Number(item.quantity_on_hand) === 0
+    ).length;
+
+    const lowStock = inventory.filter(
+        item => Number(item.quantity_on_hand) > 0 &&
+                Number(item.quantity_on_hand) <=
+                Number(item.reorder_level)
+    ).length;
+
+    function updateReport(valueId, barId, count) {
+
+        const percentage = total
+            ? count / total * 100
+            : 0;
+
+        document.getElementById(valueId).textContent =
+            total ? `${percentage.toFixed(1)}%` : "N/A";
+
+        document.getElementById(barId).style.width =
+            `${percentage}%`;
+    }
+
+    updateReport(
+        "reportAvailability", "availabilityBar", available
+    );
+
+    updateReport(
+        "reportHealthy", "healthyBar", healthy
+    );
+
+    updateReport(
+        "reportOutOfStock", "outOfStockBar", outOfStock
+    );
+
+    updateReport(
+        "reportLowStock", "lowStockBar", lowStock
+    );
+}
+
+async function updateInventoryKPIs() {
+    try {
+        const inventory = [];
+        let page = 1;
+        let totalPages = 1;
+
+        // Retrieve all inventory records
+        do {
+            const response = await fetch(
+                `${API_BASE}/inventory?page=${page}&size=100`,
+                { cache: "no-store" }
+            );
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                throw new Error("Could not retrieve KPI data.");
+            }
+
+            inventory.push(...result.data);
+            totalPages = result.pagination.pages;
+            page++;
+
+        } while (page <= totalPages);
+
+        let totalStock = 0;
+
+        const allProducts = new Set();
+        const availableProducts = new Set();
+        const lowStockProducts = new Set();
+
+        inventory.forEach(item => {
+            const quantity = Number(item.quantity_on_hand);
+            const reorderLevel = Number(item.reorder_level);
+
+            totalStock += quantity;
+
+            allProducts.add(item.product_id);
+
+            if (quantity > 0) {
+                availableProducts.add(item.product_id);
+            }
+
+            if (quantity > 0 && quantity <= reorderLevel) {
+                lowStockProducts.add(item.product_id);
+            }
+        });
+
+        const outOfStockProducts =
+            allProducts.size - availableProducts.size;
+
+        // Update dashboard KPI cards
+        document.getElementById("totalStockKPI").textContent =
+            totalStock.toLocaleString();
+
+        document.getElementById("availableProductsKPI").textContent =
+            availableProducts.size;
+
+        document.getElementById("lowStockKPI").textContent =
+            lowStockProducts.size;
 
         document.getElementById("outOfStockKPI").textContent =
-        outOfStockProducts;
+            outOfStockProducts;
+
+        const totalStores = new Set(
+            inventory.map(item => item.store_id)
+        ).size;
+
+        document.getElementById("totalStoresKPI").textContent =
+            totalStores;
+
+        updateStockChart(inventory);
+        updateInventoryPieChart(inventory);
+        updateReportsKPIs(inventory);
+
+        console.log("Live KPIs updated successfully!");
+
+    } catch (error) {
+        console.error("KPI update failed:", error);
+
+        ["totalStockKPI", "availableProductsKPI",
+         "lowStockKPI", "outOfStockKPI"].forEach(id => {
+            document.getElementById(id).textContent = "N/A";
+        });
+    }
 }
 
 // Initialise inventory table and dashboard KPIs
@@ -1024,52 +1519,90 @@ updateInventoryKPIs();
 
 </script>
 
-
-<!-- B3.2: Temporary Update Stock functionality -->
+<!-- B3.1: Live inventory update integration -->
 <script>
 document.getElementById("updateStockForm")
-    .addEventListener("submit", function(event) {
+    .addEventListener("submit", async function(event) {
 
     event.preventDefault();
 
-    const product = document.getElementById("stockProduct").value;
-    const store = document.getElementById("stockStore").value;
+    const productId = document.getElementById("stockProduct").value;
+    const storeId = document.getElementById("stockStore").value;
     const quantityInput = document.getElementById("stockQuantity");
     const quantity = Number(quantityInput.value);
     const message = document.getElementById("stockUpdateMessage");
 
-    if (!product || !store ||
+    if (!productId || !storeId ||
         quantityInput.value.trim() === "" ||
         !Number.isInteger(quantity) || quantity < 0) {
+
         message.textContent = "Please enter valid stock information.";
         return;
     }
 
-    if (!demoAvailability[product] ||
-        !(store in demoAvailability[product])) {
-        message.textContent = "Product or store not found.";
-        return;
+    message.textContent = "Updating stock...";
+
+    try {
+        // Find the correct inventory record
+        const response = await fetch(
+            `${API_BASE}/inventory?product_id=${productId}&store_id=${storeId}`
+        );
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.error || "Inventory lookup failed.");
+        }
+
+        if (result.data.length === 0) {
+            throw new Error("Inventory record not found.");
+        }
+
+        const inventoryId = result.data[0].inventory_id;
+
+        // Update the actual database record
+        const updateResponse = await fetch(
+            `${API_BASE}/inventory/${inventoryId}`,
+            {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    quantity_on_hand: quantity
+                })
+            }
+        );
+
+        const updateResult = await updateResponse.json();
+
+        if (!updateResponse.ok) {
+            throw new Error(
+                updateResult.error || "Stock update failed."
+            );
+        }
+
+        message.textContent =
+            `Stock updated successfully! New quantity: ${quantity} units. Saved to database.`;
+
+        message.style.color = "green";
+
+        await updateInventoryTable();
+        await updateInventoryKPIs();
+
+        // Refresh product availability
+        if (document.getElementById("availabilityProduct").value === productId) {
+            document.getElementById("checkAvailabilityBtn").click();
+        }
+
+    } catch (error) {
+        message.textContent = "Error: " + error.message;
+        message.style.color = "red";
+        console.error(error);
     }
-
-    // Update shared temporary inventory
-    demoAvailability[product][store] = quantity;
-
-    // Refresh the main inventory table
-    updateInventoryTable();
-
-    // Refresh dashboard KPIs
-    updateInventoryKPIs();
-
-    // Refresh the availability results
-    if (document.getElementById("availabilityProduct").value === product) {
-        document.getElementById("checkAvailabilityBtn").click();
-    }
-
-    message.textContent =
-        `Demo stock updated! ${product} at ${store}: ` +
-        `${quantity} units. Not saved to the database.`;
 });
 </script>
+
 
 
 </body>
