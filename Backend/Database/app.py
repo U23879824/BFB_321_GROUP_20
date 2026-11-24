@@ -4,6 +4,7 @@ import os
 from pathlib import Path
 
 from flask import Flask, jsonify
+from flask_cors import CORS
 from werkzeug.exceptions import HTTPException
 
 from Backend.config import configurations
@@ -16,6 +17,12 @@ from Backend.Routes.reference_data import reference_bp
 
 def create_app():
     app = Flask(__name__)
+
+    CORS(app, resources={
+        r"/api/*": {
+            "origins": ["http://127.0.0.1:5500"]
+        }
+    })
 
     environment = os.getenv("FLASK_ENV", "development")
     config_class = configurations.get(
