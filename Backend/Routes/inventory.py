@@ -3,7 +3,7 @@ from flask import Blueprint, request, jsonify
 import logging
 import pymysql
 
-from Backend.Models import inventory as inventory_model
+from Backend.Models import inventory_M as inventory_model
 
 inventory_bp = Blueprint("inventory", __name__)
 logger = logging.getLogger(__name__)
