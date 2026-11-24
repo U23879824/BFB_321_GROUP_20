@@ -14,7 +14,7 @@ from Backend.Routes.inventory import inventory_bp
 from Backend.Routes.reference_data import reference_bp
 
 
-def create_app():S
+def create_app():
     app = Flask(__name__)
 
     environment = os.getenv("FLASK_ENV", "development")
