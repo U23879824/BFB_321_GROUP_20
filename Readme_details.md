@@ -1,26 +1,51 @@
-GROUP 20:
-Project title:
+# GROUP 20:
+# Project title:
 A Web-Based, Location-Aware Inventory Management System 
 for Improving Online Order Fulfilment in Retail
 
-Project Description
+# Project Description
 This project focuses on improving inventory visibility between Pick n Pay physical stores and the PnP asap online ordering platform.
 
 The proposed web-based system helps users monitor stock availability across different stores, identify inventory discrepancies and improve online order fulfilment.
 
-All group members' names and student numbers:
+# All group members' names and student numbers:
 Nomfundo Buthelezi u21766445 
 Nyeleti Nwaila u23879824
 Rangoato Mankoe u22737139 
 Lindelwa Ntuli u23612712 
 
-Git Usernames:
+# Git Usernames:
 Nomfundo Buthelezi: Lamashenge
 Nyeleti Nwaila: U23879824
 Rangoato Mankoe: Lucia-Mankoe
 Lindelwa Ntuli: Lindelwa-Ntuli
 
-Installation/setup instructions
+
+# Team members and task allocation
+
+# Lindelwa Ntuli
+- B1: Database development and MySQL integration.
+- Final report: Background, problem statement, objectives and database design.
+- Compile references and check citation consistency.
+
+# Nomfundo Buthelezi
+- B2: Core API development.
+- Final report (B2 and B7): API design and code organisation.
+- Review the final report, check formatting and ensure that all report guidelines are met.
+
+# Nyeleti Nwaila
+- B3: Frontend development and integration.
+- Final report (B3 and B5.1): Application features and quantified impact.
+- B6: Compile team details, task allocation and Git contribution evidence.
+
+# Lucia Makoe
+- B4: Operations, documentation and error handling.
+- Assist with B2 core API development tasks.
+- Final report (B4 and B5.2): Deployment, sustainability and conclusion.
+- B5.3: Check figure and table numbering, captions and screenshot readability.
+
+
+# Installation/setup instructions
 Step Instruction                                        Purpose
 1    Install Visual Studio Code (VS Code).              To open and edit the project files.
 2    Install Python.                                    To run the Python calculations.    

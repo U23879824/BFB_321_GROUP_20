@@ -87,31 +87,31 @@
                 <article class="kpi-card">
                     <div class="kpi-icon blue">▤</div>
                     <p>Total units in stock</p>
-                    <h2>1,284</h2>
+                    <h2 id="totalStockKPI">1,284</h2>
                     <small>Across the sample inventory</small>
                 </article>
                 <article class="kpi-card">
                     <div class="kpi-icon green">✓</div>
                     <p>Available products</p>
-                    <h2>44</h2>
+                    <h2 id="availableProductsKPI">44</h2>
                     <small>In stock or low stock</small>
                 </article>
                 <article class="kpi-card">
                     <div class="kpi-icon orange">!</div>
                     <p>Low-stock products</p>
-                    <h2>14</h2>
+                    <h2 id="lowStockKPI">14</h2>
                     <small>Review replenishment needs</small>
                 </article>
                 <article class="kpi-card">
                     <div class="kpi-icon red">×</div>
                     <p>Out-of-stock products</p>
-                    <h2>6</h2>
+                    <h2 id="outOfStockKPI">6</h2>
                     <small>May affect online orders</small>
                 </article>
                 <article class="kpi-card">
                     <div class="kpi-icon purple">↩</div>
                     <p>Customer returns</p>
-                    <h2>12</h2>
+                    <h2 id="customerReturnsKPI">12</h2>
                     <small>Illustrative return count</small>
                 </article>
             </section>
@@ -923,6 +923,7 @@ document.getElementById("placeOrderForm")
     // Temporary demonstration: reduce stock in browser memory
     demoAvailability[product][store] -= quantity;
     updateInventoryTable();
+    updateInventoryKPIs();
 
     message.textContent =
         `Demo order successful! ${quantity} units of ${product} ` +
@@ -980,6 +981,46 @@ function updateInventoryTable() {
         });
     });
 }
+function updateInventoryKPIs() {
+    let totalStock = 0;
+    let availableProducts = 0;
+    let lowStockProducts = 0;
+    let outOfStockProducts = 0;
+
+    Object.values(demoAvailability).forEach(stores => {
+        const quantities = Object.values(stores).map(Number);
+
+        totalStock += quantities.reduce((sum, qty) => sum + qty, 0);
+
+        if (quantities.some(qty => qty > 0)) {
+            availableProducts++;
+        }
+
+        if (quantities.some(qty => qty > 0 && qty <= 12)) {
+            lowStockProducts++;
+        }
+
+        if (quantities.every(qty => qty === 0)) {
+            outOfStockProducts++;
+        }
+    });
+
+    document.getElementById("totalStockKPI").textContent =
+        totalStock.toLocaleString();
+
+    document.getElementById("availableProductsKPI").textContent =
+        availableProducts;
+
+    document.getElementById("lowStockKPI").textContent =
+        lowStockProducts;
+
+        document.getElementById("outOfStockKPI").textContent =
+        outOfStockProducts;
+}
+
+// Initialise inventory table and dashboard KPIs
+updateInventoryTable();
+updateInventoryKPIs();
 
 </script>
 
@@ -1015,6 +1056,9 @@ document.getElementById("updateStockForm")
 
     // Refresh the main inventory table
     updateInventoryTable();
+
+    // Refresh dashboard KPIs
+    updateInventoryKPIs();
 
     // Refresh the availability results
     if (document.getElementById("availabilityProduct").value === product) {
