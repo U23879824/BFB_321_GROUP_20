@@ -2,7 +2,7 @@
 from flask import Blueprint, jsonify
 import logging
 
-from Backend.Models import reference_data as reference_model
+from Backend.Models import reference_data_M as reference_model
 
 reference_bp = Blueprint("reference", __name__)
 logger = logging.getLogger(__name__)
